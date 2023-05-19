@@ -8,7 +8,7 @@ struct Measurement {
 }
 
 async fn hello_world() -> impl Responder {
-    "Hello World!"
+    "Olá Mundo!"
 }
 
 async fn current_temperature() -> impl Responder {

@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   title: 'Actix',
-  tagline: 'Actix Web is a powerful, pragmatic, and extremely fast web framework for Rust',
+  tagline: 'O Actix Web é um framework web poderoso, pragmático e extremamente rápido para Rust.',
   url: 'https://actix.rs',
   baseUrl: '/',
   onBrokenLinks: 'throw',
@@ -23,19 +23,19 @@ module.exports = {
         {
           to: 'docs',
           activeBasePath: 'docs',
-          label: 'Documentation',
+          label: 'Documentação',
           position: 'left',
         },
         {
           to: 'community',
           activeBasePath: 'community',
-          label: 'Community',
+          label: 'Comunidade',
           position: 'left',
         },
         {
           to: 'code',
           activeBasePath: 'code',
-          label: 'Code',
+          label: 'Código',
           position: 'left',
         },
       ],

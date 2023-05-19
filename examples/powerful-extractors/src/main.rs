@@ -12,7 +12,7 @@ struct Event {
 
 async fn capture_event(evt: web::Json<Event>) -> impl Responder {
     let new_event = store_in_db(evt.timestamp, &evt.kind, &evt.tags);
-    format!("got event {}", new_event.id.unwrap())
+    format!("Evento recebido {}", new_event.id.unwrap())
 }
 // </powerful-extractors>
 

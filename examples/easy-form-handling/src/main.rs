@@ -9,15 +9,15 @@ struct Register {
     country: String,
 }
 
-// register form is JSON
+// O formulário de registro é JSON
 async fn json_register(form: web::Json<Register>) -> impl Responder {
-    format!("Hello {} from {}!", form.username, form.country)
+    format!("Olá {} do país {}!", form.username, form.country)
 }
 
-// register form can be either JSON or URL-encoded
+// O formulário de registro pode ser JSON ou codificado em URL.
 async fn register(form: Either<Json<Register>, Form<Register>>) -> impl Responder {
     let Register { username, country } = form.into_inner();
-    format!("Hello {username} from {country}!")
+    format!("Olá {username} do país {country}!")
 }
 // </easy-form-handling>
 

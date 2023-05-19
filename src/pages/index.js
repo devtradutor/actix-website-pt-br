@@ -32,34 +32,34 @@ const Home = () => {
 const highlights = [
   {
     icon: faShieldAlt,
-    title: 'Type Safe',
+    title: 'Segurança de Tipos',
     description: (
       <>
-        Forget about stringly typed objects, from request to response,
-        everything has types.
+      Esqueça objetos com tipagem baseada em strings, desde a requisição até 
+      a resposta, tudo possui tipos.
       </>
     ),
   },
   {
     icon: faBatteryFull,
-    title: 'Feature Rich',
+    title: 'Rico em Recursos',
     description: (
-      <>Actix provides a lot of features out of box. HTTP/2, logging, etc.</>
+      <>O Actix fornece muitos recursos prontos para uso. HTTP/2, logging, etc.</>
     ),
   },
   {
     icon: faPuzzlePiece,
-    title: 'Extensible',
+    title: 'Extensível',
     description: (
-      <>Easily create your own libraries that any Actix application can use.</>
+      <>Crie facilmente suas próprias bibliotecas que podem ser utilizadas por qualquer aplicação Actix.</>
     ),
   },
   {
     icon: faTachometerAlt,
-    title: 'Blazingly Fast',
+    title: 'Extremamente Rápido',
     description: (
       <>
-        Actix is blazingly fast. Don't take our word for it -- <a href='https://www.techempower.com/benchmarks/#section=data-r21&hw=ph&test=fortune' target='_blank' rel='noopener noreferrer'>see for yourself!</a>
+      O Actix é extremamente rápido. Não apenas confie em nossas palavras -- <a href='https://www.techempower.com/benchmarks/#section=data-r21&hw=ph&test=fortune' target='_blank' rel='noopener noreferrer'>veja por si mesmo!</a>
       </>
     ),
   },
@@ -88,7 +88,7 @@ const Hero = () => {
             className="button button--primary button--lg"
             to={useBaseUrl('docs/')}
           >
-            Get Started
+            Começar
           </Link>
         </div>
       </div>
@@ -135,10 +135,11 @@ const Examples = () => {
       <div className={styles.example}>
         <div className={styles.exampleContent}>
           <div className={styles.featureText}>
-            <h3 className={styles.featureTitle}>Hello World!</h3>
+            <h3 className={styles.featureTitle}>Olá Mundo!</h3>
             <p>
-              Getting started with Actix is easy. An Actix app comes with a URL routing system that lets you match on
-              URLs and invoke individual handlers.
+            Começar com o Actix é fácil. Um aplicativo Actix vem com um sistema 
+            de roteamento de URL que permite corresponder a URLs e chamar 
+            manipuladores individuais.
             </p>
           </div>
           <div className={styles.example__code}>
@@ -149,11 +150,11 @@ const Examples = () => {
       <div className={styles.example}>
         <div className={styles.exampleContent}>
           <div className={styles.featureText}>
-            <h3 className={styles.featureTitle}>Flexible Responders</h3>
+            <h3 className={styles.featureTitle}>Respondedores flexíveis</h3>
             <p>
-              Handler functions in Actix can return a wide range of objects that
-              implement the <code>Responder</code> trait. This makes it a breeze
-              to return consistent responses from your APIs.
+            As funções manipuladoras no Actix podem retornar uma ampla variedade de objetos que 
+            implementam a trait <code>Responder</code>. Isso torna fácil retornar respostas 
+            consistentes em suas APIs.
             </p>
           </div>
           <div className={styles.example__code}>
@@ -167,13 +168,11 @@ const Examples = () => {
       <div className={styles.example}>
         <div className={styles.exampleContent}>
           <div className={styles.featureText}>
-            <h3 className={styles.featureTitle}>Powerful Extractors</h3>
-            <p>
-              Actix comes with a powerful extractor system that extracts data from
-              the incoming HTTP request and passes it to your view functions. Not
-              only does this make for a convenient API but it also means that your
-              view functions can be synchronous code and still benefit from
-              asynchronous IO handling.
+            <h3 className={styles.featureTitle}>Extratores poderosos</h3>
+            <p>O Actix vem com um sistema de extração poderoso que extrai dados da requisição HTTP 
+              recebida e os passa para as suas funções de visualização. Isso não apenas torna a API 
+              conveniente, mas também significa que suas funções de visualização podem ser código síncrono e 
+              ainda se beneficiar do tratamento assíncrono de I/O.
             </p>
           </div>
           <div className={styles.example__code}>
@@ -187,10 +186,10 @@ const Examples = () => {
       <div className={styles.example}>
         <div className={styles.exampleContent}>
           <div className={styles.featureText}>
-            <h3 className={styles.featureTitle}>Easy Form Handling</h3>
+            <h3 className={styles.featureTitle}>Manipulação de formulários facilitada</h3>
             <p>
-              Handling JSON or URL-encoded form data is easy. Just define a
-              structure that can be deserialized and Actix will handle the rest.
+            Manipular dados de formulários JSON ou codificados em URL é fácil. Basta definir uma 
+            estrutura que possa ser desserializada e o Actix cuidará do resto.            
             </p>
           </div>
           <div className={styles.example__code}>

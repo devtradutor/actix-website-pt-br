@@ -3,12 +3,12 @@ use actix_web::{get, web, App, HttpServer, Responder};
 
 #[get("/")]
 async fn index() -> impl Responder {
-    "Hello, World!"
+    "Olá Mundo!"
 }
 
 #[get("/{name}")]
 async fn hello(name: web::Path<String>) -> impl Responder {
-    format!("Hello {}!", &name)
+    format!("Olá {}!", &name)
 }
 
 #[actix_web::main]
