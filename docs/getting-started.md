@@ -1,30 +1,29 @@
 ---
-title: Getting Started
+title: Começando
 ---
 
 import RenderCodeBlock from '@theme/CodeBlock';
 import CodeBlock from "@site/src/components/code_block.js";
 import { rustVersion, actixWebMajorVersion } from "@site/vars";
 
-## Installing Rust
+## Instalando o Rust
 
-If you don't have Rust yet, we recommend you use `rustup` to manage your Rust installation. The [official rust guide][rustguide] has a wonderful section on getting started.
+Se você ainda não tem o Rust instalado, recomendamos que use o `rustup` para gerenciar a instalação. O [guia oficial do Rust][rustguide] possui uma seção maravilhosa sobre como começar.
 
 <p>
-Actix Web currently has a minimum supported Rust version (MSRV) of { rustVersion }. Running <code>rustup update</code> will ensure you have the latest and greatest Rust version available. As such, this guide assumes you are running Rust { rustVersion } or later.
+O Actix Web atualmente requer a versão mínima suportada do Rust (MSRV) de { rustVersion }. Executar o comando <code>rustup update</code> garantirá que você tenha a versão mais recente do Rust disponível. Portanto, este guia pressupõe que você esteja executando o Rust { rustVersion } ou posterior.
 </p>
 
-## Hello, world!
+## Olá, mundo!
 
-Start by creating a new binary-based Cargo project and changing into the new directory:
+Comece criando um novo projeto Cargo baseado em binário e entre no novo diretório:
 
 ```bash
 cargo new hello-world
 cd hello-world
 ```
 
-Add `actix-web` as a dependency of your project by adding the following to your `Cargo.toml` file.
-
+Adicione o `actix-web` como uma dependência do seu projeto, adicionando o seguinte ao arquivo `Cargo.toml`.
 
 <!-- DEPENDENCY -->
 
@@ -33,21 +32,21 @@ Add `actix-web` as a dependency of your project by adding the following to your 
 actix-web = "${actixWebMajorVersion}"`}
 </RenderCodeBlock>
 
-Request handlers use async functions that accept zero or more parameters. These parameters can be extracted from a request (see `FromRequest` trait) and returns a type that can be converted into an `HttpResponse` (see `Responder` trait):
+Os manipuladores de requisição usam funções assíncronas que aceitam zero ou mais parâmetros. Esses parâmetros podem ser extraídos de uma requisição (consulte a trait `FromRequest`) e retornam um tipo que pode ser convertido em uma `HttpResponse` (consulte a trait `Responder`):
 
-Replace the contents of `src/main.rs` with the following:
+Substitua o conteúdo de `src/main.rs` pelo seguinte:
 
 <CodeBlock example="getting-started" section="handlers" />
 
-Notice that some of these handlers have routing information attached directly using the built-in macros. These allow you to specify the method and path that the handler should respond to. You will see below how to register `manual_hello` (i.e. routes that do not use a routing macro).
+Observe que alguns desses manipuladores possuem informações de roteamento anexadas diretamente usando as macros embutidas. Isso permite especificar o método e o caminho que o manipulador deve responder. Você verá abaixo como registrar `manual_hello` (ou seja, rotas que não usam uma macro de roteamento).
 
-Next, create an `App` instance and register the request handlers. Use `App::service` for the handlers using routing macros and `App::route` for manually routed handlers, declaring the path and method. Finally, the app is started inside an `HttpServer` which will serve incoming requests using your `App` as an "application factory".
+Em seguida, crie uma instância de `App` e registre os manipuladores de requisição. Use `App::service` para os manipuladores que usam macros de roteamento e `App::route` para manipuladores roteados manualmente, declarando o caminho e o método. Por fim, o aplicativo é iniciado dentro de um `HttpServer`, que servirá as requisições recebidas usando seu `App` como uma "fábrica de aplicativos".
 
-Further append the following `main` function to `src/main.rs`:
+Acrescente a seguinte função `main` ao final de `src/main.rs`:
 
 <CodeBlock example="getting-started" section="main" />
 
-That's it! Compile and run the program with `cargo run`. The `#[actix_web::main]` macro executes the async main function within the actix runtime. Now you can go to `http://127.0.0.1:8080/` or any of the other routes you defined to see the results.
+É isso! Compile e execute o programa com `cargo run`. A macro `#[actix_web::main]` executa a função main assíncrona dentro do runtime do actix. Agora você pode acessar `http://127.0.0.1:8080/` ou qualquer outra rota que você definiu para ver os resultados.
 
 <!-- LINKS -->
 

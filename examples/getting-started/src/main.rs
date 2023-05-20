@@ -3,7 +3,7 @@ use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 
 #[get("/")]
 async fn hello() -> impl Responder {
-    HttpResponse::Ok().body("Hello world!")
+    HttpResponse::Ok().body("Olá, mundo!")
 }
 
 #[post("/echo")]
@@ -12,7 +12,7 @@ async fn echo(req_body: String) -> impl Responder {
 }
 
 async fn manual_hello() -> impl Responder {
-    HttpResponse::Ok().body("Hey there!")
+    HttpResponse::Ok().body("Olá")
 }
 // </handlers>
 
