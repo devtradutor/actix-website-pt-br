@@ -4,16 +4,16 @@
 use actix_web::{web, App, HttpServer, Responder};
 
 async fn index() -> impl Responder {
-    "Hello world!"
+    "Olá Mundo!"
 }
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new().service(
-            // prefixes all resources and routes attached to it...
+            //  prefixa todos os recursos e rotas anexados a ele...
             web::scope("/app")
-                // ...so this handles requests for `GET /app/index.html`
+                // ...portanto, isso trata solicitações para `GET /app/index.html`.
                 .route("/index.html", web::get().to(index)),
         )
     })

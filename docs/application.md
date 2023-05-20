@@ -1,82 +1,81 @@
 ---
-title: Application
+title: Aplicação
 ---
 
 import CodeBlock from "@site/src/components/code_block.js";
 
-# Writing an Application
+## Escrevendo um Aplicativo
+`actix-web` fornece várias primitivas para construir servidores e aplicativos da web com Rust. Ele oferece roteamento, middleware, pré-processamento de solicitações, pós-processamento de respostas, etc.
 
-`actix-web` provides various primitives to build web servers and applications with Rust. It provides routing, middleware, pre-processing of requests, post-processing of responses, etc.
+Todos os servidores `actix-web` são construídos em torno da instância [`App`][app]. É usada para registrar rotas para recursos e middleware. Também armazena o estado do aplicativo compartilhado entre todos os manipuladores dentro do mesmo escopo.
 
-All `actix-web` servers are built around the [`App`][app] instance. It is used for registering routes for resources and middleware. It also stores application state shared across all handlers within the same scope.
+O [`scope`][scope] de um aplicativo atua como um espaço para todos os caminhos de rota, ou seja, todas as rotas para um escopo específico de aplicativo têm o mesmo prefixo de caminho de URL. O prefixo do aplicativo sempre contém uma barra "/" inicial. Se um prefixo fornecido não contiver uma barra inicial, ela será inserida automaticamente. O prefixo deve consistir em segmentos de caminho de valor.
 
-An application's [`scope`][scope] acts as a namespace for all routes, i.e. all routes for a specific application scope have the same url path prefix. The application prefix always contains a leading "/" slash. If a supplied prefix does not contain leading slash, it is automatically inserted. The prefix should consist of value path segments.
-
-> For an application with scope `/app`, any request with the paths `/app`, `/app/`, or `/app/test` would match; however, the path `/application` would not match.
+> Para um aplicativo com escopo `/app`, qualquer solicitação com os caminhos `/app`, `/app/` ou `/app/test` corresponderia; no entanto, o caminho `/application` não corresponderia.
 
 <CodeBlock example="application" file="app.rs" section="setup" />
 
-In this example, an application with the `/app` prefix and an `index.html` resource is created. This resource is available through the `/app/index.html` url.
+Neste exemplo, um aplicativo com o prefixo `/app` e um recurso `index.html` é criado. Este recurso está disponível através do URL `/app/index.html`.
 
-> For more information, check the [URL Dispatch][usingappprefix] section.
+> Para mais informações, consulte a seção [URL Dispatch][usingappprefix].
 
-## State
+## Estado
 
-Application state is shared with all routes and resources within the same scope. State can be accessed with the [`web::Data<T>`][data] extractor where `T` is the type of the state. State is also accessible for middleware.
+O estado do aplicativo é compartilhado com todas as rotas e recursos dentro do mesmo escopo. O estado pode ser acessado usando o extrator [`web::Data<T>`][data], onde `T` é o tipo do estado. O estado também é acessível para o middleware.
 
-Let's write a simple application and store the application name in the state:
+Vamos escrever um aplicativo simples e armazenar o nome do aplicativo no estado:
 
 <CodeBlock example="application" file="state.rs" section="setup" />
 
-Next, pass in the state when initializing the App and start the application:
+Em seguida, passe o estado ao inicializar o `App` e iniciar o aplicativo:
 
 <CodeBlock example="application" file="state.rs" section="start_app" />
 
-Any number of state types could be registered within the application.
+Qualquer número de tipos de estado pode ser registrado dentro do aplicativo.
 
-## Shared Mutable State
+## Estado Compartilhado Mutável
 
-`HttpServer` accepts an application factory rather than an application instance. An `HttpServer` constructs an application instance for each thread. Therefore, application data must be constructed multiple times. If you want to share data between different threads, a shareable object should be used, e.g. `Send` + `Sync`.
+O `HttpServer` aceita uma fábrica de aplicativos em vez de uma instância de aplicativo. Um `HttpServer` constrói uma instância de aplicativo para cada thread. Portanto, os dados do aplicativo devem ser construídos várias vezes. Se você deseja compartilhar dados entre diferentes threads, um objeto compartilhável deve ser usado, por exemplo, `Send` + `Sync`.
 
-Internally, [`web::Data`][data] uses `Arc`. So in order to avoid creating two `Arc`s, we should create our Data before registering it using [`App::app_data()`][appdata].
+Internamente, [`web::Data`][data] usa `Arc`. Portanto, para evitar a criação de dois `Arc`s, devemos criar nossos dados antes de registrá-los usando [`App::app_data()`][appdata].
 
-In the following example, we will write an application with mutable, shared state. First, we define our state and create our handler:
+No exemplo a seguir, escreveremos um aplicativo com estado compartilhado mutável. Primeiro, definimos nosso estado e criamos nosso manipulador:
 
 <CodeBlock example="application" file="mutable_state.rs" section="setup_mutable" />
 
-and register the data in an `App`:
+e registramos os dados em um `App`:
 
 <CodeBlock example="application" file="mutable_state.rs" section="make_app_mutable" />
 
-Key takeaways:
-- State initialized _inside_ the closure passed to `HttpServer::new` is local to the worker thread and may become de-synced if modified.
-- To achieve _globally shared state_, it must be created **outside** of the closure passed to `HttpServer::new` and moved/cloned in.
+Principais pontos a serem observados:
+- O estado inicializado _dentro_ do fechamento passado para `HttpServer::new` é local para a thread do trabalhador e pode ficar dessincronizado se for modificado.
+- Para obter um estado _globalmente compartilhado_, ele deve ser criado **fora**(outside) do fechamento passado para `HttpServer::new` e movido/clonado.
 
-## Using an Application Scope to Compose Applications
+## Usando um Escopo de Aplicativo para Compor Aplicativos
 
-The [`web::scope()`][webscope] method allows setting a resource group prefix. This scope represents a resource prefix that will be prepended to all resource patterns added by the resource configuration. This can be used to help mount a set of routes at a different location than the original author intended while still maintaining the same resource names.
+O método [`web::scope()`][webscope] permite definir um prefixo de grupo de recursos. Esse escopo representa um prefixo de recurso que será adicionado a todos os padrões de recurso adicionados pela configuração de recursos. Isso pode ser usado para montar um conjunto de rotas em uma localização diferente da pretendida pelo autor original, mantendo os mesmos nomes de recursos.
 
-For example:
+Por exemplo:
 
 <CodeBlock example="application" file="scope.rs" section="scope" />
 
-In the above example, the `show_users` route will have an effective route pattern of `/users/show` instead of `/show` because the application's scope argument will be prepended to the pattern. The route will then only match if the URL path is `/users/show`, and when the [`HttpRequest.url_for()`][urlfor] function is called with the route name `show_users`, it will generate a URL with that same path.
+No exemplo acima, a rota `show_users` terá um padrão de rota efetivo de `/users/show` em vez de `/show`, porque o argumento de escopo do aplicativo será prefixado ao padrão. A rota só será correspondida se o caminho URL for `/users/show`, e quando a função [`HttpRequest.url_for()`][urlfor] for chamada com o nome da rota `show_users`, ela gerará um URL com o mesmo caminho.
 
-## Application guards and virtual hosting
+## Guardas de Aplicativo e hospedagem virtual
 
-You can think of a guard as a simple function that accepts a _request_ object reference and returns _true_ or _false_. Formally, a guard is any object that implements the [`Guard`][guardtrait] trait. Actix Web provides several guards. You can check the [functions section][guardfuncs] of the API docs.
+Você pode pensar em uma guarda como uma função simples que aceita uma referência a um objeto de _request_ e retorna _true_ ou _false_. Formalmente, uma guarda é qualquer objeto que implementa a trait [`Guard`][guardtrait]. O Actix Web fornece várias guardas. Você pode verificar a seção [funções][guardfuncs] da documentação da API.
 
-One of the provided guards is [`Host`][guardheader]. It can be used as a filter based on request header information.
+Uma das guardas fornecidas é [`Host`][guardheader]. Ela pode ser usada como um filtro com base nas informações do cabeçalho da solicitação.
 
 <CodeBlock example="application" file="vh.rs" section="vh" />
 
-## Configure
+## Configuração
 
-For simplicity and reusability both [`App`][appconfig] and [`web::Scope`][webscopeconfig] provide the `configure` method. This function is useful for moving parts of the configuration to a different module or even library. For example, some of the resource's configuration could be moved to a different module.
+Para simplicidade e reutilização, tanto [`App`][appconfig] quanto [`web::Scope`][webscopeconfig] fornecem o método `configure`. Essa função é útil para mover partes da configuração para um módulo diferente ou até mesmo uma biblioteca. Por exemplo, parte da configuração do recurso pode ser movida para um módulo diferente.
 
 <CodeBlock example="application" file="config.rs" section="config" />
 
-The result of the above example would be:
+O resultado do exemplo acima seria:
 
 ```
 /         -> "/"
@@ -84,7 +83,7 @@ The result of the above example would be:
 /api/test -> "test"
 ```
 
-Each [`ServiceConfig`][serviceconfig] can have its own `data`, `routes`, and `services`.
+Cada [`ServiceConfig`][serviceconfig] pode ter seus próprios `data`, `routes` e `services`.
 
 <!-- LINKS -->
 

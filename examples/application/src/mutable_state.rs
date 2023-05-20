@@ -3,29 +3,29 @@ use actix_web::{web, App, HttpServer};
 use std::sync::Mutex;
 
 struct AppStateWithCounter {
-    counter: Mutex<i32>, // <- Mutex is necessary to mutate safely across threads
+    counter: Mutex<i32>, // <- Mutex é necessário para realizar mutações com segurança entre threads.
 }
 
 async fn index(data: web::Data<AppStateWithCounter>) -> String {
-    let mut counter = data.counter.lock().unwrap(); // <- get counter's MutexGuard
-    *counter += 1; // <- access counter inside MutexGuard
+    let mut counter = data.counter.lock().unwrap(); // <- obter MutexGuard do contador
+    *counter += 1; // <- acessa o counter dentro do  MutexGuard
 
-    format!("Request number: {counter}") // <- response with count
+    format!("Número da solicitação: {counter}") // <- resposta com counter
 }
 // </setup_mutable>
 
 // <make_app_mutable>
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    // Note: web::Data created _outside_ HttpServer::new closure
+    // Observação: web::Data criado _fora_ do fechamento HttpServer::new
     let counter = web::Data::new(AppStateWithCounter {
         counter: Mutex::new(0),
     });
 
     HttpServer::new(move || {
-        // move counter into the closure
+        //mova o counter para o fechamento
         App::new()
-            .app_data(counter.clone()) // <- register the created data
+            .app_data(counter.clone()) // <- registre os dados criados
             .route("/", web::get().to(index))
     })
     .bind(("127.0.0.1", 8080))?

@@ -1,15 +1,15 @@
 // <setup>
 use actix_web::{get, web, App, HttpServer};
 
-// This struct represents state
+// Está estrutura representa um estado
 struct AppState {
     app_name: String,
 }
 
 #[get("/")]
 async fn index(data: web::Data<AppState>) -> String {
-    let app_name = &data.app_name; // <- get app_name
-    format!("Hello {app_name}!") // <- response with app_name
+    let app_name = &data.app_name; // <- obtem o app_name
+    format!("Olá {app_name}!") // <- resposta com o  app_name
 }
 // </setup>
 
