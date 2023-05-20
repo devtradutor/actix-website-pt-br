@@ -1,6 +1,6 @@
 module.exports = {
   docs: {
-    Introduction: ['welcome', 'whatis'],
+    'Introdução': ['welcome', 'whatis'],
     Basics: [
       'getting-started',
       'application',

@@ -1,21 +1,18 @@
 ---
-title: What is Actix Web
+title: O que é o Actix Web
 ---
 import { rustVersion } from "@site/vars";
 
-# Actix Web is part of an Ecosystem of Crates
+# Actix Web faz parte de um Ecossistema de Crates
 
-Long ago, Actix Web was built on top of the `actix` actor framework. Now, Actix Web is largely unrelated to the actor framework and is built using a different system. Though `actix` is still maintained, its usefulness as a general tool is diminishing as the futures and async/await ecosystem matures. At this time, the use of `actix` is only required for WebSocket endpoints.
+Há muito tempo, o Actix Web foi construído em cima do framework de atores `actix`. Agora, o Actix Web é em grande parte independente do framework de atores e é construído usando um sistema diferente. Embora o `actix` ainda seja mantido, sua utilidade como uma ferramenta geral está diminuindo à medida que o ecossistema de futures e async/await amadurece. Neste momento, o uso do `actix` é necessário apenas para pontos de extremidade de WebSocket.
 
-We call Actix Web a powerful and pragmatic framework. For all intents and purposes it's a micro-framework with a few twists. If you are already a Rust programmer you will probably find yourself at home quickly, but even if you are coming from another programming language you should find Actix Web easy to pick up.
+Chamamos o Actix Web de um framework poderoso e pragmático. Para todos os efeitos, é um micro-framework com algumas peculiaridades. Se você já é um programador Rust, provavelmente se sentirá em casa rapidamente, mas mesmo se estiver vindo de outra linguagem de programação, você deverá achar o Actix Web fácil de aprender.
 
-<!-- TODO -->
-<!-- actix-extras -->
-
-An application developed with Actix Web will expose an HTTP server contained within a native executable. You can either put this behind another HTTP server like nginx or serve it up as-is. Even in the complete absence of another HTTP server Actix Web is powerful enough to provide HTTP/1 and HTTP/2 support as well as TLS (HTTPS). This makes it useful for building small services ready for production.
+Uma aplicação desenvolvida com o Actix Web expõe um servidor HTTP contido em um executável nativo. Você pode colocá-lo atrás de outro servidor HTTP como o nginx ou servi-lo como está. Mesmo na ausência completa de outro servidor HTTP, o Actix Web é poderoso o suficiente para fornecer suporte para HTTP/1 e HTTP/2, além de TLS (HTTPS). Isso o torna útil para construir pequenos serviços prontos para produção.
 
 <p>
-Most importantly: Actix Web runs on Rust { rustVersion } or later and it works with stable releases.
+Mais importante ainda: o Actix Web roda no Rust { rustVersion } ou posterior e funciona com versões estáveis.
 </p>
 
 <!-- TODO -->
