@@ -1,14 +1,14 @@
 ---
-title: Welcome
-description: Guiding you through building web apps with Actix
+title: Bem-vindo
+description: Guiando você na construção de aplicativos web com o Actix.
 slug: /
 ---
 
-# Welcome to Actix
+# Bem-vindo ao Actix
 
-Actix Web lets you quickly and confidently develop web services in Rust and this guide will get you going in no time.
+O Actix Web permite que você desenvolva rapidamente e com confiança serviços web em Rust, e este guia irá ajudá-lo a começar em pouco tempo.
 
-The documentation on this website focuses primarily on the Actix Web framework. For information about the actor framework called Actix, check out the [Actix chapter][actix-chapter] (or the lower level [actix API docs][actix-docs]). Otherwise, head on to the [getting started guide][getting-started]. If you already know your way around and you need specific information you might want to read the [actix-web API docs][actix-web-docs].
+A documentação neste site concentra-se principalmente no framework Actix Web. Para obter informações sobre o framework de atores chamado Actix, confira o [capítulo do Actix][actix-chapter] (ou a documentação da API [actix de nível inferior][actix-docs]). Caso contrário, siga para o [guia de início rápido][getting-started]. Se você já está familiarizado e precisa de informações específicas, talvez queira ler a documentação da API [actix-web][actix-web-docs].
 
 [getting-started]: https://actix.rs/docs/getting-started
 [actix-web-docs]: https://docs.rs/actix-web
