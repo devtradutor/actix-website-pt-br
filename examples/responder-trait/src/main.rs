@@ -16,7 +16,7 @@ impl Responder for MyObj {
     fn respond_to(self, _req: &HttpRequest) -> HttpResponse<Self::Body> {
         let body = serde_json::to_string(&self).unwrap();
 
-        // Create response and set content type
+        // Criar resposta e definir o tipo de conteúdo
         HttpResponse::Ok()
             .content_type(ContentType::json())
             .body(body)

@@ -5,10 +5,10 @@ type RegisterResult = Either<HttpResponse, Result<&'static str, Error>>;
 
 async fn index() -> RegisterResult {
     if is_a_variant() {
-        // choose Left variant
+        // escolhe a variante Left
         Either::Left(HttpResponse::BadRequest().body("Bad data"))
     } else {
-        // choose Right variant
+        // escolhe a variante Right
         Either::Right(Ok("Hello!"))
     }
 }
