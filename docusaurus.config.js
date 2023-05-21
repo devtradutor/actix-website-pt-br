@@ -1,6 +1,10 @@
 const path = require('path');
 
 module.exports = {
+  i18n: {
+    defaultLocale: 'pt-br',
+    locales: ['pt-br'],
+  },
   title: 'Actix',
   tagline: 'O Actix Web é um framework web poderoso, pragmático e extremamente rápido para Rust.',
   url: 'https://actix.rs',

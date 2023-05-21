@@ -9,7 +9,7 @@ struct Info {
     username: String,
 }
 
-/// deserialize `Info` from request's body, max payload size is 4kb
+/// desserializa `Info` do corpo da requisição, com tamanho máximo de carga útil de 4kb.
 async fn index(info: web::Json<Info>) -> impl Responder {
     format!("Welcome {}!", info.username)
 }
@@ -20,14 +20,14 @@ async fn main() -> std::io::Result<()> {
         let json_config = web::JsonConfig::default()
             .limit(4096)
             .error_handler(|err, _req| {
-                // create custom error response
+                // criar uma resposta de erro personalizada
                 error::InternalError::from_response(err, HttpResponse::Conflict().finish())
                     .into()
             });
 
         App::new().service(
             web::resource("/")
-                // change json extractor configuration
+                // alterar a configuração do extrator JSON
                 .app_data(json_config)
                 .route(web::post().to(index)),
         )

@@ -7,7 +7,7 @@ struct Info {
     username: String,
 }
 
-/// deserialize `Info` from request's body
+/// desserializa `Info` do corpo da requisição
 #[post("/submit")]
 async fn submit(info: web::Json<Info>) -> Result<String> {
     Ok(format!("Welcome {}!", info.username))

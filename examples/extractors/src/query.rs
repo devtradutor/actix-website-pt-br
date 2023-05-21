@@ -7,11 +7,11 @@ struct Info {
     username: String,
 }
 
-// this handler gets called if the query deserializes into `Info` successfully
-// otherwise a 400 Bad Request error response is returned
+// Este manipulador é chamado se a consulta for desserializada com sucesso em `Info`.
+// Caso contrário, uma resposta de erro 400 Bad Request é retornada.
 #[get("/")]
 async fn index(info: web::Query<Info>) -> String {
-    format!("Welcome {}!", info.username)
+    format!("Bem-vindo {}!", info.username)
 }
 // </query>
 

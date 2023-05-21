@@ -1,38 +1,37 @@
 ---
 title: Handlers
 ---
-
 import CodeBlock from "@site/src/components/code_block.js";
 
-# Request Handlers
+# Manipuladores de Solicitação
 
-A request handler is an async function that accepts zero or more parameters that can be extracted from a request (i.e., [_impl FromRequest_][implfromrequest]) and returns a type that can be converted into an HttpResponse (i.e., [_impl Responder_][respondertrait]).
+Um manipulador de solicitação é uma função assíncrona que aceita zero ou mais parâmetros que podem ser extraídos de uma solicitação (ou seja, [_impl FromRequest_][implfromrequest]) e retorna um tipo que pode ser convertido em um HttpResponse (ou seja, [_impl Responder_][respondertrait]).
 
-Request handling happens in two stages. First the handler object is called, returning any object that implements the [_Responder_][respondertrait] trait. Then, `respond_to()` is called on the returned object, converting itself to a `HttpResponse` or `Error`.
+O processamento da solicitação ocorre em duas etapas. Primeiro, o objeto manipulador é chamado, retornando qualquer objeto que implemente o [_trait Responder_][respondertrait]. Em seguida, `respond_to()` é chamado no objeto retornado, convertendo-o em um `HttpResponse` ou `Error`.
 
-By default actix-web provides `Responder` implementations for some standard types, such as `&'static str`, `String`, etc.
+Por padrão, o Actix Web fornece implementações de `Responder` para alguns tipos padrão, como `&'static str`, `String`, etc.
 
-> For a complete list of implementations, check the [_Responder documentation_][responderimpls].
+> Para uma lista completa de implementações, consulte a [_documentação do Responder_][responderimpls].
 
-Examples of valid handlers:
+Aqui estão alguns exemplos de manipuladores válidos:
 
 ```rust
 async fn index(_req: HttpRequest) -> &'static str {
-    "Hello world!"
+    "Olá, mundo!"
 }
 ```
 
 ```rust
 async fn index(_req: HttpRequest) -> String {
-    "Hello world!".to_owned()
+    "Olá, mundo!".to_owned()
 }
 ```
 
-You can also change the signature to return `impl Responder` which works well if more complex types are involved.
+Você também pode alterar a assinatura para retornar `impl Responder`, o que funciona bem se tipos mais complexos estiverem envolvidos.
 
 ```rust
 async fn index(_req: HttpRequest) -> impl Responder {
-    web::Bytes::from_static(b"Hello world!")
+    web::Bytes::from_static(b"Olá, mundo!")
 }
 ```
 
@@ -42,25 +41,25 @@ async fn index(req: HttpRequest) -> Box<Future<Item=HttpResponse, Error=Error>> 
 }
 ```
 
-## Response with custom type
+## Resposta com tipo personalizado
 
-To return a custom type directly from a handler function, the type needs to implement the `Responder` trait.
+Para retornar um tipo personalizado diretamente de uma função manipuladora, o tipo precisa implementar o trait `Responder`.
 
-Let's create a response for a custom type that serializes to an `application/json` response:
+Vamos criar uma resposta para um tipo personalizado que é serializado para uma resposta `application/json`:
 
 <CodeBlock example="responder-trait" file="main.rs" section="responder-trait" />
 
-## Streaming response body
+## Transmissão do corpo da resposta
 
-Response body can be generated asynchronously. In this case, body must implement the stream trait `Stream<Item=Bytes, Error=Error>`, i.e.:
+O corpo da resposta pode ser gerado de forma assíncrona. Nesse caso, o corpo precisa implementar o trait de stream `Stream<Item=Bytes, Error=Error>`, ou seja:
 
 <CodeBlock example="async-handlers" file="stream.rs" section="stream" />
 
-## Different return types (Either)
+## Tipos de retorno diferentes (Either)
 
-Sometimes, you need to return different types of responses. For example, you can error check and return errors, return async responses, or any result that requires two different types.
+Às vezes, você precisa retornar diferentes tipos de respostas. Por exemplo, você pode verificar erros e retorná-los, retornar respostas assíncronas ou qualquer resultado que exija dois tipos diferentes.
 
-For this case, the [Either][either] type can be used. `Either` allows combining two different responder types into a single type.
+Para esse caso, o tipo [Either][either] pode ser usado. `Either` permite combinar dois tipos de resposta diferentes em um único tipo.
 
 <CodeBlock example="either" file="main.rs" section="either" />
 
