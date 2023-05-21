@@ -8,11 +8,11 @@ struct Info {
     friend: String,
 }
 
-/// extract path info using serde
-#[get("/users/{user_id}/{friend}")] // <- define path parameters
+/// Extrair informações de caminho usando serde.
+#[get("/users/{user_id}/{friend}")] // <- Define os parâmetros do caminho.
 async fn index(info: web::Path<Info>) -> Result<String> {
     Ok(format!(
-        "Welcome {}, user_id {}!",
+        "Bem-vindo {}, user_id {}!",
         info.friend, info.user_id
     ))
 }

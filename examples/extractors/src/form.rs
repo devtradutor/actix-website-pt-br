@@ -7,12 +7,12 @@ struct FormData {
     username: String,
 }
 
-/// extract form data using serde
-/// this handler gets called only if the content type is *x-www-form-urlencoded*
-/// and the content of the request could be deserialized to a `FormData` struct
+/// extrair dados de formulário usando serde
+/// este manipulador é chamado apenas se o tipo de conteúdo for *x-www-form-urlencoded*
+/// e o conteúdo da solicitação puder ser desserializado em uma estrutura `FormData`
 #[post("/")]
 async fn index(form: web::Form<FormData>) -> Result<String> {
-    Ok(format!("Welcome {}!", form.username))
+    Ok(format!("Bem-vindo {}!", form.username))
 }
 // </form>
 

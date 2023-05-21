@@ -33,7 +33,7 @@ Em seguida, passe o estado ao inicializar o `App` e iniciar o aplicativo:
 
 Qualquer número de tipos de estado pode ser registrado dentro do aplicativo.
 
-## Estado Compartilhado Mutável
+## Estado Compartilhado Mutável {#shared-mutable-state}
 
 O `HttpServer` aceita uma fábrica de aplicativos em vez de uma instância de aplicativo. Um `HttpServer` constrói uma instância de aplicativo para cada thread. Portanto, os dados do aplicativo devem ser construídos várias vezes. Se você deseja compartilhar dados entre diferentes threads, um objeto compartilhável deve ser usado, por exemplo, `Send` + `Sync`.
 

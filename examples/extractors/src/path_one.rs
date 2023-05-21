@@ -1,13 +1,13 @@
 // <path-one>
 use actix_web::{get, web, App, HttpServer, Result};
 
-/// extract path info from "/users/{user_id}/{friend}" url
-/// {user_id} - deserializes to a u32
-/// {friend} - deserializes to a String
-#[get("/users/{user_id}/{friend}")] // <- define path parameters
+/// Extrair informações de caminho da URL "/users/{user_id}/{friend}".
+/// {user_id} - Deserializa para um u32.
+/// {friend} - Deserializa para uma String.
+#[get("/users/{user_id}/{friend}")] // <- Define os parâmetros do caminho.
 async fn index(path: web::Path<(u32, String)>) -> Result<String> {
     let (user_id, friend) = path.into_inner();
-    Ok(format!("Welcome {}, user_id {}!", friend, user_id))
+    Ok(format!("Bem-vindo {}, user_id {}!", friend, user_id))
 }
 
 #[actix_web::main]
