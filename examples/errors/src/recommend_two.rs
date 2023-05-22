@@ -8,7 +8,7 @@ use derive_more::{Display, Error};
 
 #[derive(Debug, Display, Error)]
 enum UserError {
-    #[display(fmt = "An internal error occurred. Please try again later.")]
+    #[display(fmt = "Ocorreu um erro interno. Por favor, tente novamente mais tarde.")]
     InternalError,
 }
 
@@ -29,7 +29,7 @@ impl error::ResponseError for UserError {
 #[get("/")]
 async fn index() -> Result<&'static str, UserError> {
     do_thing_that_fails().map_err(|_e| UserError::InternalError)?;
-    Ok("success!")
+    Ok("Sucesso!")
 }
 // </recommend-two>
 

@@ -8,7 +8,7 @@ use derive_more::{Display, Error};
 
 #[derive(Debug, Display, Error)]
 enum UserError {
-    #[display(fmt = "Validation error on field: {}", field)]
+    #[display(fmt = "Erro de validação no campo: {}", field)]
     ValidationError { field: String },
 }
 

@@ -8,7 +8,7 @@ struct MyError {
 
 #[get("/")]
 async fn index() -> actix_web::Result<String> {
-    let result = Err(MyError { name: "test error" });
+    let result = Err(MyError { name: "teste erro" });
 
     result.map_err(|err| error::ErrorBadRequest(err.name))
 }

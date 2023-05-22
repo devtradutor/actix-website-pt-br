@@ -4,17 +4,17 @@ use derive_more::{Display, Error};
 use log::info;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "my error: {}", name)]
+#[display(fmt = "meu erro: {}", name)]
 pub struct MyError {
     name: &'static str,
 }
 
-// Use default implementation for `error_response()` method
+// Utilize a implementação padrão para o método `error_response()`.
 impl error::ResponseError for MyError {}
 
 #[get("/")]
 async fn index() -> Result<&'static str, MyError> {
-    let err = MyError { name: "test error" };
+    let err = MyError { name: "teste o erro" };
     info!("{}", err);
     Err(err)
 }

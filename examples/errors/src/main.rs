@@ -9,16 +9,16 @@ use actix_web::{error, Result};
 use derive_more::{Display, Error};
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "my error: {}", name)]
+#[display(fmt = "meu erro: {}", name)]
 struct MyError {
     name: &'static str,
 }
 
-// Use default implementation for `error_response()` method
+// Utilize a implementação padrão para o método `error_response()`
 impl error::ResponseError for MyError {}
 
 async fn index() -> Result<&'static str, MyError> {
-    Err(MyError { name: "test" })
+    Err(MyError { name: "teste" })
 }
 // </response-error>
 

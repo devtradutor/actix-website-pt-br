@@ -8,7 +8,7 @@ module.exports = {
       'extractors',
       'handlers',
     ],
-    Advanced: [
+    'Avançado': [
       'errors',
       'url-dispatch',
       'request',
