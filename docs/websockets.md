@@ -6,16 +6,15 @@ import CodeBlock from "@site/src/components/code_block.js";
 
 # Websockets
 
-Actix Web supports WebSockets with the `actix-web-actors` crate. It is possible to convert a request's `Payload` to a stream of [_ws::Message_][message] with a [_web::Payload_][payload] and then use stream combinators to handle actual messages, but it is simpler to handle websocket communications with an http actor.
+O Actix Web suporta WebSockets com a biblioteca `actix-web-actors`. É possível converter o `Payload` de uma requisição em um fluxo de [_ws::Message_][message] usando um [_web::Payload_][payload] e, em seguida, usar combinadores de fluxo para lidar com as mensagens reais. No entanto, é mais simples lidar com as comunicações do WebSocket usando um ator HTTP.
 
-The following is an example of a simple websocket echo server:
-
+A seguir está um exemplo de um servidor simples de eco de WebSocket:
 
 <CodeBlock example="websockets" file="main.rs" section="websockets" />
 
-> A simple websocket echo server example is available in the [examples directory][examples].
+> Um exemplo simples de um servidor de eco de WebSocket está disponível no [diretório de exemplos][examples].
 
-> An example chat server with the ability to chat over a websocket or TCP connection is available in [websocket-chat directory][chat]
+> Um exemplo de servidor de chat com a capacidade de conversar por meio de uma conexão WebSocket ou TCP está disponível no [diretório websocket-chat][chat].
 
 [message]: https://docs.rs/actix-web-actors/2/actix_web_actors/ws/enum.Message.html
 [payload]: https://docs.rs/actix-web/4/actix_web/web/struct.Payload.html
