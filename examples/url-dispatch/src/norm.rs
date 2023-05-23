@@ -4,7 +4,7 @@
 use actix_web::{middleware, HttpResponse};
 
 async fn index() -> HttpResponse {
-    HttpResponse::Ok().body("Hello")
+    HttpResponse::Ok().body("Olá")
 }
 
 #[actix_web::main]

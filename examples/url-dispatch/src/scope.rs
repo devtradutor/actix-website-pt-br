@@ -3,12 +3,12 @@ use actix_web::{get, web, App, HttpResponse, HttpServer};
 // <scope>
 #[get("/show")]
 async fn show_users() -> HttpResponse {
-    HttpResponse::Ok().body("Show users")
+    HttpResponse::Ok().body("Mostrar usuários")
 }
 
 #[get("/show/{id}")]
 async fn user_detail(path: web::Path<(u32,)>) -> HttpResponse {
-    HttpResponse::Ok().body(format!("User detail: {}", path.into_inner().0))
+    HttpResponse::Ok().body(format!("Detalhes do usuário: {}", path.into_inner().0))
 }
 
 #[actix_web::main]

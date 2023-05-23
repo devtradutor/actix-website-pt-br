@@ -3,7 +3,7 @@ use actix_web::{get, guard, http::header, HttpRequest, HttpResponse, Result};
 
 #[get("/test/")]
 async fn index(req: HttpRequest) -> Result<HttpResponse> {
-    let url = req.url_for("foo", ["1", "2", "3"])?; // <- generate url for "foo" resource
+    let url = req.url_for("foo", ["1", "2", "3"])?; // <- Gerar URL para o recurso "foo"
 
     Ok(HttpResponse::Found()
         .insert_header((header::LOCATION, url.as_str()))
@@ -18,7 +18,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .service(
                 web::resource("/test/{a}/{b}/{c}")
-                    .name("foo") // <- set resource name, then it could be used in `url_for`
+                    .name("foo") // <- Defina o nome do recurso e então ele poderá ser usado em `url_for`.
                     .guard(guard::Get())
                     .to(HttpResponse::Ok),
             )

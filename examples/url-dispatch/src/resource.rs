@@ -2,7 +2,7 @@
 use actix_web::{guard, web, App, HttpResponse};
 
 async fn index() -> HttpResponse {
-    HttpResponse::Ok().body("Hello")
+    HttpResponse::Ok().body("Olá")
 }
 
 pub fn main() {

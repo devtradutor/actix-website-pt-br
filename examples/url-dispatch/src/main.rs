@@ -16,7 +16,7 @@ pub mod urls;
 use actix_web::{web, App, HttpResponse, HttpServer};
 
 async fn index() -> HttpResponse {
-    HttpResponse::Ok().body("Hello")
+    HttpResponse::Ok().body("Olá")
 }
 
 #[actix_web::main]
