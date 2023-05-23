@@ -65,7 +65,7 @@ module.exports = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
-            'https://github.com/werickdasilva/actix-website-pt-br/edit/master',
+            'https://github.com/devtradutor/actix-website-pt-br/edit/main',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
