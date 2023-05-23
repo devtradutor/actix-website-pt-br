@@ -1,23 +1,23 @@
 ---
-title: Requests
+title: Requisições
 ---
 
 import CodeBlock from "@site/src/components/code_block.js";
 
-# JSON Request
+# Requisição JSON
 
-There are several options for json body deserialization.
+Existem várias opções para desserialização do corpo JSON.
 
-The first option is to use _Json_ extractor. First, you define a handler function that accepts `Json<T>` as a parameter, then, you use the `.to()` method for registering this handler. It is also possible to accept arbitrary valid json object by using `serde_json::Value` as a type `T`.
+A primeira opção é usar o extrator _Json_. Primeiro, você define uma função manipuladora que aceita `Json<T>` como parâmetro e, em seguida, usa o método `.to()` para registrar essa manipuladora. Também é possível aceitar um objeto JSON válido arbitrário usando `serde_json::Value` como tipo `T`.
 
-First example of json of `JSON Request` depends on `serde`:
+Primeiro exemplo de `requisição JSON` depende do `serde`:
 
 ```toml
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 ```
 
-Second example of `JSON Request` depends on `serde` and `serde_json` and `futures`:
+Segundo exemplo de `requisição JSON` depende do `serde`, `serde_json` e `futures`:
 
 ```toml
 [dependencies]
@@ -26,57 +26,57 @@ serde_json = "1"
 futures = "0.3"
 ```
 
-If you want to add default value for a field, refer to `serde`'s [documentation](https://serde.rs/attr-default.html).
+Se você quiser adicionar um valor padrão para um campo, consulte a [documentação](https://serde.rs/attr-default.html) do `serde`.
 
 <CodeBlock example="requests" file="main.rs" section="json-request" />
 
-You may also manually load the payload into memory and then deserialize it.
+Você também pode carregar manualmente a carga útil na memória e, em seguida, desserializá-la.
 
-In the following example, we will deserialize a _MyObj_ struct. We need to load the request body first and then deserialize the json into an object.
+No exemplo a seguir, vamos desserializar uma estrutura _MyObj_. Primeiro, precisamos carregar o corpo da requisição e, em seguida, desserializar o JSON em um objeto.
 
 <CodeBlock example="requests" file="manual.rs" section="json-manual" />
 
-> A complete example for both options is available in [examples directory][examples].
+> Um exemplo completo para ambas as opções está disponível no [diretório de exemplos][examples].
 
-## Content Encoding
+## Codificação de conteúdo
 
-Actix Web automatically _decompresses_ payloads. The following codecs are supported:
+O Actix Web descompacta automaticamente as cargas úteis. Os seguintes codecs são suportados:
 
 - Brotli
 - Gzip
 - Deflate
 - Zstd
 
-If request headers contain a `Content-Encoding` header, the request payload is decompressed according to the header value. Multiple codecs are not supported, i.e: `Content-Encoding: br, gzip`.
+Se os cabeçalhos da requisição contiverem um cabeçalho `Content-Encoding`, a carga útil da requisição é descompactada de acordo com o valor do cabeçalho. Vários codecs não são suportados, ou seja, `Content-Encoding: br, gzip`.
 
-## Chunked transfer encoding
+## Codificação de transferência segmentada
 
-Actix automatically decodes _chunked_ encoding. The [`web::Payload`][payloadextractor] extractor already contains the decoded byte stream. If the request payload is compressed with one of the supported compression codecs (br, gzip, deflate), then the byte stream is decompressed.
+O Actix decodifica automaticamente a codificação _chunked_. O extrator [`web::Payload`][payloadextractor] já contém o fluxo de bytes decodificado. Se a carga útil da requisição estiver compactada com um dos codecs de compressão suportados (br, gzip, deflate), o fluxo de bytes será descompactado.
 
-## Multipart body
+## Corpo multipartes
 
-Actix Web provides multipart stream support with an external crate, [`actix-multipart`][multipartcrate].
+O Actix Web fornece suporte a fluxo de multipartes com uma crate externa, [`actix-multipart`][multipartcrate].
 
-> A full example is available in the [examples directory][multipartexample].
+> Um exemplo completo está disponível no [diretório de exemplos][multipartexample].
 
-## Urlencoded body
+## Corpo codificado por URL
 
-Actix Web provides support for _application/x-www-form-urlencoded_ encoded bodies with the [`web::Form`][formencoded] extractor which resolves to the deserialized instance. The type of the instance must implement the `Deserialize` trait from _serde_.
+O Actix Web oferece suporte a corpos codificados como _application/x-www-form-urlencoded_ com o extrator [`web::Form`][formencoded], que é resolvido para a instância desserializada. O tipo da instância deve implementar o trait `Deserialize` do _serde_.
 
-The _UrlEncoded_ future can resolve into an error in several cases:
+O futuro _UrlEncoded_ pode retornar um erro em vários casos:
 
-- content type is not `application/x-www-form-urlencoded`
-- transfer encoding is `chunked`.
-- content-length is greater than 256k
-- payload terminates with error.
+- o tipo de conteúdo não é `application/x-www-form-urlencoded`
+- a codificação de transferência é `chunked`.
+- o tamanho do conteúdo é maior que 256k
+- a carga útil termina com um erro.
 
 <CodeBlock example="requests" file="urlencoded.rs" section="urlencoded" />
 
-## Streaming request
+## Requisição de streaming
 
-_HttpRequest_ is a stream of `Bytes` objects. It can be used to read the request body payload.
+_HttpRequest_ é um fluxo de objetos `Bytes`. Pode ser usado para ler a carga útil do corpo da requisição.
 
-In the following example, we read and print the request payload chunk by chunk:
+No exemplo a seguir, lemos e imprimimos a carga útil da requisição em pedaços:
 
 <CodeBlock example="requests" file="streaming.rs" section="streaming" />
 

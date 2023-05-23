@@ -12,9 +12,9 @@ struct Info {
     username: String,
 }
 
-/// extract `Info` using serde
+/// Extraindo Info usando serde
 async fn index(info: web::Json<Info>) -> Result<String> {
-    Ok(format!("Welcome {}!", info.username))
+    Ok(format!("Bem-vindo {}!", info.username))
 }
 
 #[actix_web::main]
