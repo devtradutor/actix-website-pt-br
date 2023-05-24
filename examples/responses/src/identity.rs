@@ -6,7 +6,7 @@ use actix_web::{
 #[get("/")]
 async fn index() -> HttpResponse {
     HttpResponse::Ok()
-        // v- disable compression
+        // v- Desativa a compressão 
         .insert_header(ContentEncoding::Identity)
         .body("data")
 }
