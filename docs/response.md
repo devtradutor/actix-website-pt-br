@@ -49,8 +49,6 @@ Desative explicitamente a compressão de conteúdo em um manipulador definindo `
 
 Ao lidar com um corpo já comprimido (por exemplo, ao servir ativos pré-comprimidos), defina manualmente o cabeçalho `Content-Encoding` na resposta para ignorar o middleware:
 
-[responsebuilder]: link_para_a_documentação
-[compressmidddleware]: link_para_o_Compress_middleware
 <CodeBlock example="responses" file="identity_two.rs" section="identity-two" />
 
 [responsebuilder]: https://docs.rs/actix-web/4/actix_web/struct.HttpResponseBuilder.html
