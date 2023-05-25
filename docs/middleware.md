@@ -6,40 +6,40 @@ import CodeBlock from "@site/src/components/code_block.js";
 
 # Middleware
 
-Actix Web's middleware system allows us to add additional behavior to request/response processing. Middleware can hook into an incoming request process, enabling us to modify requests as well as halt request processing to return a response early.
+O sistema de middleware do Actix Web nos permite adicionar comportamentos adicionais ao processamento de requisições/respostas. O middleware pode interagir com o processo de uma requisição recebida, permitindo modificar as requisições e interromper o processamento para retornar uma resposta antecipada.
 
-Middleware can also hook into response processing.
+O middleware também pode interagir com o processamento de respostas.
 
-Typically, middleware is involved in the following actions:
+Tipicamente, o middleware está envolvido nas seguintes ações:
 
-- Pre-process the Request
-- Post-process a Response
-- Modify application state
-- Access external services (redis, logging, sessions)
+- Pré-processar a requisição
+- Pós-processar uma resposta
+- Modificar o estado da aplicação
+- Acessar serviços externos (redis, registro, sessões)
 
-Middleware is registered for each `App`, `scope`, or `Resource` and executed in opposite order as registration. In general, a _middleware_ is a type that implements the [_Service trait_][servicetrait] and [_Transform trait_][transformtrait]. Each method in the traits has a default implementation. Each method can return a result immediately or a _future_ object.
+O middleware é registrado para cada `App`, `scope` ou `Resource` e é executado em ordem oposta ao registro. Em geral, um _middleware_ é um tipo que implementa o [_Service trait_][servicetrait] e [_Transform trait_][transformtrait]. Cada método nos traits tem uma implementação padrão. Cada método pode retornar um resultado imediatamente ou um objeto _futuro_.
 
-The following demonstrates creating a simple middleware:
+A seguir, demonstra-se a criação de um middleware simples:
 
 <CodeBlock example="middleware" file="main.rs" section="simple" />
 
-Alternatively, for simple use cases, you can use [_wrap_fn_][wrap_fn] to create small, ad-hoc middleware:
+Alternativamente, para casos de uso simples, você pode usar [_wrap_fn_][wrap_fn] para criar middlewares pequenos e ad hoc:
 
 <CodeBlock example="middleware" file="wrap_fn.rs" section="wrap-fn" />
 
-> Actix Web provides several useful middleware, such as _logging_, _user sessions_, _compress_, etc.
+> O Actix Web fornece vários middlewares úteis, como _logging_, _user sessions_, _compress_, etc.
 
-**Warning: if you use `wrap()` or `wrap_fn()` multiple times, the last occurrence will be executed first.**
+**Aviso: se você usar `wrap()` ou `wrap_fn()` várias vezes, a última ocorrência será executada primeiro.**
 
 ## Logging
 
-Logging is implemented as a middleware. It is common to register a logging middleware as the first middleware for the application. Logging middleware must be registered for each application.
+O registro é implementado como um middleware. É comum registrar um middleware de registro como o primeiro middleware para a aplicação. O middleware de registro deve ser registrado para cada aplicação.
 
-The `Logger` middleware uses the standard log crate to log information. You should enable logger for _actix_web_ package to see access log ([env_logger][envlogger] or similar).
+O middleware `Logger` usa a biblioteca padrão de registro para registrar informações. Você deve habilitar o registro para o pacote _actix_web_ para ver o log de acesso ([env_logger][envlogger] ou similar).
 
-### Usage
+### Uso
 
-Create `Logger` middleware with the specified `format`. Default `Logger` can be created with `default` method, it uses the default format:
+Crie um middleware `Logger` com o `format` especificado. O `Logger` padrão pode ser criado com o método `default`, que usa o formato padrão:
 
 ```ignore
   %a %t "%r" %s %b "%{Referer}i" "%{User-Agent}i" %T
@@ -47,59 +47,58 @@ Create `Logger` middleware with the specified `format`. Default `Logger` can be 
 
 <CodeBlock example="middleware" file="logger.rs" section="logger" />
 
-The following is an example of the default logging format:
+A seguir, temos um exemplo do formato padrão de registro:
 
 ```
 INFO:actix_web::middleware::logger: 127.0.0.1:59934 [02/Dec/2017:00:21:43 -0800] "GET / HTTP/1.1" 302 0 "-" "curl/7.54.0" 0.000397
 INFO:actix_web::middleware::logger: 127.0.0.1:59947 [02/Dec/2017:00:22:40 -0800] "GET /index.html HTTP/1.1" 200 0 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:57.0) Gecko/20100101 Firefox/57.0" 0.000646
 ```
 
-### Format
+### Formato
 
-- `%%` The percent sign
-- `%a` Remote IP-address (IP-address of proxy if using reverse proxy)
-- `%t` Time when the request was started to process
-- `%P` The process ID of the child that serviced the request
-- `%r` First line of request
-- `%s` Response status code
-- `%b` Size of response in bytes, including HTTP headers
-- `%T` Time taken to serve the request, in seconds with floating fraction in .06f format
-- `%D` Time taken to serve the request, in milliseconds
+- `%%` O sinal de porcentagem
+- `%a` Endereço IP remoto (endereço IP do proxy se estiver usando um proxy reverso)
+- `%t` Hora em que a requisição começou a ser processada
+- `%P` O ID do processo filho que atendeu à requisição
+- `%r` Primeira linha da requisição
+- `%s` Código de status da resposta
+- `%b` Tamanho da resposta em bytes, incluindo os cabeçalhos HTTP
+- `%T` Tempo decorrido para atender à requisição, em segundos, com fração decimal no formato .06f
+- `%D` Tempo decorrido para atender à requisição, em milissegundos
 - `%{FOO}i` request.headers['FOO']
 - `%{FOO}o` response.headers['FOO']
 - `%{FOO}e` os.environ['FOO']
 
-## Default headers
+## Cabeçalhos padrão
 
-To set default response headers, the `DefaultHeaders` middleware can be used. The _DefaultHeaders_ middleware does not set the header if response headers already contain a specified header.
+Para definir cabeçalhos de resposta padrão, o middleware `DefaultHeaders` pode ser usado. O middleware _DefaultHeaders_ não define o cabeçalho se os cabeçalhos da resposta já contiverem um cabeçalho especificado.
 
 <CodeBlock example="middleware" file="default_headers.rs" section="default-headers" />
 
-## User sessions
+## Sessões de usuário
 
-Actix Web provides a general solution for session management. The [**actix-session**][actixsession] middleware can use multiple backend types to store session data.
+O Actix Web fornece uma solução geral para gerenciamento de sessões. O middleware [**actix-session**][actixsession] pode usar vários tipos de backend para armazenar dados de sessão.
 
-> By default, only cookie session backend is implemented. Other backend implementations can be added.
+> Por padrão, apenas o backend de sessão de cookie está implementado. Outras implementações de backend podem ser adicionadas.
 
-[**CookieSession**][cookiesession] uses cookies as session storage. `CookieSessionBackend` creates sessions which are limited to storing fewer than 4000 bytes of data, as the payload must fit into a single cookie. An internal server error is generated if a session contains more than 4000 bytes.
+[**CookieSession**][cookiesession] usa cookies como armazenamento de sessão. `CookieSessionBackend` cria sessões que estão limitadas a armazenar menos de 4000 bytes de dados, pois o payload deve caber em um único cookie. Um erro interno do servidor é gerado se uma sessão contiver mais de 4000 bytes.
 
-A cookie may have a security policy of _signed_ or _private_. Each has a respective `CookieSession` constructor.
+Um cookie pode ter uma política de segurança _signed_ (assinado) ou _private_ (privado). Cada um tem um respectivo construtor `CookieSession`.
 
-A _signed_ cookie may be viewed but not modified by the client. A _private_ cookie may neither be viewed nor modified by the client.
+Um cookie _signed_ pode ser visualizado, mas não modificado pelo cliente. Um cookie _private_ (privado) não pode ser visualizado nem modificado pelo cliente.
 
-The constructors take a key as an argument. This is the private key for cookie session - when this value is changed, all session data is lost.
+Os construtores recebem uma chave como argumento. Esta é a chave privada para a sessão de cookie - quando esse valor é alterado, todos os dados da sessão são perdidos.
 
-In general, you create a `SessionStorage` middleware and initialize it with specific backend implementation, such as a `CookieSession`. To access session data the [`Session`][requestsession] extractor must be used. This method returns a [_Session_][sessionobj] object, which allows us to get or set session data.
-> `actix_session::storage::CookieSessionStore` is available on the crate feature "cookie-session".
+Em geral, você cria um middleware `SessionStorage` e o inicializa com uma implementação de backend específica, como `CookieSession`. Para acessar os dados da sessão, você deve usar o extractor [`Session`][requestsession]. Este método retorna um objeto [_Session_][sessionobj], que nos permite obter ou definir dados da sessão.
+> `actix_session::storage::CookieSessionStore` está disponível na funcionalidade "cookie-session" do crate.
 
 <CodeBlock example="middleware" file="user_sessions.rs" section="user-session" />
 
-## Error handlers
+## Manipuladores de erros
 
-`ErrorHandlers` middleware allows us to provide custom handlers for responses.
+O middleware `ErrorHandlers` nos permite fornecer manipuladores personalizados para respostas de erro.
 
-You can use the `ErrorHandlers::handler()` method to register a custom error handler for a specific status code. You can modify an existing response or create a completly new one. The error handler can return a response immediately or return a future that resolves into a response.
-
+Você pode usar o método `ErrorHandlers::handler()` para registrar um manipulador de erro personalizado para um código de status específico. Você pode modificar uma resposta existente ou criar uma completamente nova. O manipulador de erro pode retornar uma resposta imediatamente ou retornar um futuro que se resolve em uma resposta.
 <CodeBlock example="middleware" file="errorhandler.rs" section="error-handler" />
 
 [sessionobj]: https://docs.rs/actix-session/0.7/actix_session/struct.Session.html

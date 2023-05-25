@@ -5,7 +5,7 @@ use actix_session::{Session, SessionMiddleware, storage::CookieSessionStore};
 use actix_web::{web, App, Error, HttpResponse, HttpServer, cookie::Key};
 
 async fn index(session: Session) -> Result<HttpResponse, Error> {
-    // access session data
+    // Acessa os dados da seseção
     if let Some(count) = session.get::<i32>("counter")? {
         session.insert("counter", count + 1)?;
     } else {
@@ -13,7 +13,7 @@ async fn index(session: Session) -> Result<HttpResponse, Error> {
     }
 
     Ok(HttpResponse::Ok().body(format!(
-        "Count is {:?}!",
+        "A contagem está em  {:?}!",
         session.get::<i32>("counter")?.unwrap()
     )))
 }
@@ -23,7 +23,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
             .wrap(
-                // create cookie based session middleware
+                // cria um cookie baseado em seção middleware
                 SessionMiddleware::builder(CookieSessionStore::default(), Key::from(&[0; 64]))
                     .cookie_secure(false)
                     .build()
