@@ -10,7 +10,7 @@ use futures::stream;
 async fn sse(_req: HttpRequest) -> HttpResponse {
     let mut counter: usize = 5;
 
-    // yields `data: N` where N in [5; 1]
+    // prduz `data: N` onde N em [5; 1]
     let server_events =
         stream::poll_fn(move |_cx| -> Poll<Option<Result<web::Bytes, Error>>> {
             if counter == 0 {
@@ -49,21 +49,21 @@ mod tests {
         let body = resp.into_body();
         pin!(body);
 
-        // first chunk
+        // primeiro pedaço
         let bytes = future::poll_fn(|cx| body.as_mut().poll_next(cx)).await;
         assert_eq!(
             bytes.unwrap().unwrap(),
             web::Bytes::from_static(b"data: 5\n\n")
         );
 
-        // second chunk
+        // segundo pedaço
         let bytes = future::poll_fn(|cx| body.as_mut().poll_next(cx)).await;
         assert_eq!(
             bytes.unwrap().unwrap(),
             web::Bytes::from_static(b"data: 4\n\n")
         );
 
-        // remaining part
+        // parte restante
         for i in 0..3 {
             let expected_data = format!("data: {}\n\n", 3 - i);
             let bytes = future::poll_fn(|cx| body.as_mut().poll_next(cx)).await;
