@@ -1,5 +1,5 @@
 ---
-title: Static Files
+title: Arquivos Estático
 ---
 
 import CodeBlock from "@site/src/components/code_block.js";
