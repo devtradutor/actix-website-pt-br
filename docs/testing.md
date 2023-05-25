@@ -4,35 +4,35 @@ title: Testing
 
 import CodeBlock from "@site/src/components/code_block.js";
 
-# Testing
+# Testando
 
-Every application should be well tested. Actix Web provides tools to perform unit and integration tests.
+Toda aplicação deve ser bem testada. O Actix Web fornece ferramentas para realizar testes unitários e de integração.
 
-## Unit Tests
+## Testes Unitários
 
-For unit testing, actix-web provides a request builder type. [_TestRequest_][testrequest] implements a builder-like pattern. You can generate a `HttpRequest` instance with `to_http_request()` and call your handler with it.
+Para testes unitários, o actix-web fornece um tipo de construtor de requisição. [_TestRequest_][testrequest] implementa um padrão semelhante a um construtor. Você pode gerar uma instância de `HttpRequest` com `to_http_request()` e chamá-la no seu manipulador.
 
 <CodeBlock example="testing" file="main.rs" section="unit-tests" />
 
-## Integration tests
+## Testes de Integração
 
-There are a few methods for testing your application. Actix Web can be used to run the application with specific handlers in a real HTTP server.
+Existem alguns métodos para testar sua aplicação. O Actix Web pode ser usado para executar a aplicação com manipuladores específicos em um servidor HTTP real.
 
-`TestRequest::get()`, `TestRequest::post()` and other methods can be used to send requests to the test server.
+`TestRequest::get()`, `TestRequest::post()` e outros métodos podem ser usados para enviar requisições para o servidor de teste.
 
-To create a `Service` for testing, use the `test::init_service` method which accepts a regular `App` builder.
+Para criar um `Service` para teste, use o método `test::init_service`, que aceita um construtor `App` regular.
 
-> Check the [API documentation][actixdocs] for more information.
+> Consulte a [documentação da API][actixdocs] para obter mais informações.
 
 <CodeBlock example="testing" file="integration_one.rs" section="integration-one" />
 
-If you need more complex application configuration, testing should be very similar to creating the normal application. For example, you may need to initialize application state. Create an `App` with a `data` method and attach state just like you would from a normal application.
+Se você precisar de uma configuração de aplicativo mais complexa, o teste deve ser muito semelhante à criação da aplicação normal. Por exemplo, você pode precisar inicializar o estado da aplicação. Crie um `App` com um método `data` e anexe o estado da mesma forma que faria em uma aplicação normal.
 
 <CodeBlock example="testing" file="integration_two.rs" section="integration-two" />
 
-## Stream response tests
+## Testes de Resposta de Stream
 
-If you need to test stream generation, it would be enough to call [`into_parts()`][resintoparts] and convert the resulting body into a future and execute it, for example when testing [_Server Sent Events_][serversentevents].
+Se você precisar testar a geração de stream, será suficiente chamar [`into_parts()`][resintoparts] e converter o corpo resultante em um futuro e executá-lo, por exemplo, ao testar [_Server Sent Events_][serversentevents].
 
 <CodeBlock example="testing" file="stream_response.rs" section="stream-response" />
 

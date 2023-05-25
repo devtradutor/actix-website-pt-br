@@ -13,15 +13,15 @@ use actix_web::{
 };
 use futures_util::future::LocalBoxFuture;
 
-// There are two steps in middleware processing.
-// 1. Middleware initialization, middleware factory gets called with
-//    next service in chain as parameter.
-// 2. Middleware's call method gets called with normal request.
+// Existem duas etapas no processamento de middlewares.
+// 1. Inicialização do middleware, a fábrica de middleware é chamada 
+// com o próximo serviço na cadeia como parâmetro.
+// 2. O método de chamada do middleware é chamado com a requisição normal.
 pub struct SayHi;
 
-// Middleware factory is `Transform` trait
-// `S` - type of the next service
-// `B` - type of response's body
+// A fábrica de Middleware que é uma trait chamada `Transform`
+// `S` - O tipo do próximo serviço
+// `B` - O tipo do corpo da resposta
 impl<S, B> Transform<S, ServiceRequest> for SayHi
 where
     S: Service<ServiceRequest, Response = ServiceResponse<B>, Error = Error>,
@@ -56,14 +56,14 @@ where
     forward_ready!(service);
 
     fn call(&self, req: ServiceRequest) -> Self::Future {
-        println!("Hi from start. You requested: {}", req.path());
+        println!("Oi do início. Você solicitou: {}", req.path());
 
         let fut = self.service.call(req);
 
         Box::pin(async move {
             let res = fut.await?;
 
-            println!("Hi from response");
+            println!("Oi da resposta");
             Ok(res)
         })
     }
@@ -77,7 +77,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new().wrap(SayHi).service(
             web::resource("/").to(|| async {
-                "Hello, middleware! Check the console where the server is run."
+                "Olá, middleware! Verifique o console onde o servidor está sendo executado."
             }),
         )
     })
