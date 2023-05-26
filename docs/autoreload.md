@@ -1,17 +1,16 @@
 ---
-title: Auto-Reloading
+title: Recarga Automática(Auto-Reloading)
 ---
 
-# Auto-Reloading Development Server
+# Servidor de Desenvolvimento com Recarga Automática(Auto-Reloading)
 
-During development it can be very handy to have cargo automatically recompile the code on changes. This can be accomplished very easily by using [`cargo-watch`].
+Durante o desenvolvimento, pode ser muito útil ter o cargo recompilando automaticamente o código quando houver alterações. Isso pode ser facilmente realizado usando o [`cargo-watch`].
 
 ```sh
  cargo watch -x run
  ```
 
-## Historical Note
+## Nota Histórica
 
-An old version of this page recommended using a combination of systemfd and listenfd, but this has many gotchas and was difficult to integrate properly, especially when part of a broader development workflow. We consider [`cargo-watch`] to be sufficient for auto-reloading purposes.
-
+Uma versão antiga desta página recomendava o uso de uma combinação de systemfd e listenfd, mas isso apresentava várias armadilhas e era difícil de integrar corretamente, especialmente quando fazia parte de um fluxo de trabalho de desenvolvimento mais amplo. Consideramos [`cargo-watch`] suficiente para fins de recarga automática.
 [`cargo-watch`]: https://github.com/passcod/cargo-watch
