@@ -33,23 +33,23 @@ fn insert_new_user(
 ) -> diesel::QueryResult<User> {
     use crate::schema::users::dsl::*;
 
-    // Create insertion model
+    // Criar modelo de inserção
     let uid = format!("{}", uuid::Uuid::new_v4());
     let new_user = NewUser {
         id: &uid,
         name: &user_name,
     };
 
-    // normal diesel operations
+    // Operações normais do Diesel
     diesel::insert_into(users)
         .values(&new_user)
         .execute(conn)
-        .expect("Error inserting person");
+        .expect("Erro ao inserir pessoa");
 
     let user = users
         .filter(id.eq(&uid))
         .first::<User>(conn)
-        .expect("Error loading person that was just inserted");
+        .expect("Erro ao carregar a pessoa que foi inserida agora");
 
     Ok(user)
 }
@@ -60,13 +60,13 @@ type DbPool = r2d2::Pool<r2d2::ConnectionManager<SqliteConnection>>;
 
 #[actix_web::main]
 async fn main() -> io::Result<()> {
-    // connect to SQLite DB
+    // conecta ao banco de dados SQLite
     let manager = r2d2::ConnectionManager::<SqliteConnection>::new("app.db");
     let pool = r2d2::Pool::builder()
         .build(manager)
         .expect("database URL should be valid path to SQLite DB file");
 
-    // start HTTP server on port 8080
+    // Inicia o servidor HTTP na porta 8080
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(pool.clone()))
@@ -86,9 +86,9 @@ async fn index(
     let (name,) = name.into_inner();
 
     let user = web::block(move || {
-        // Obtaining a connection from the pool is also a potentially blocking operation.
-        // So, it should be called within the `web::block` closure, as well.
-        let mut conn = pool.get().expect("couldn't get db connection from pool");
+        // Obter uma conexão do pool também é uma operação potencialmente bloqueante.
+        // Portanto, deve ser chamada dentro do fechamento `web::block`.
+        let mut conn = pool.get().expect("Não foi possível obter uma conexão do banco de dados a partir do pool.");
 
         insert_new_user(&mut conn, name)
     })
