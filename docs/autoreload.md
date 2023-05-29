@@ -13,4 +13,5 @@ Durante o desenvolvimento, pode ser muito útil ter o cargo recompilando automat
 ## Nota Histórica
 
 Uma versão antiga desta página recomendava o uso de uma combinação de systemfd e listenfd, mas isso apresentava várias armadilhas e era difícil de integrar corretamente, especialmente quando fazia parte de um fluxo de trabalho de desenvolvimento mais amplo. Consideramos [`cargo-watch`] suficiente para fins de recarga automática.
+
 [`cargo-watch`]: https://github.com/passcod/cargo-watch

@@ -1,10 +1,10 @@
 ---
-title: Databases
+title: Bancos de Dados
 ---
 
 import CodeBlock from "@site/src/components/code_block.js";
 
-# Async Options
+# Opções Assíncronas
 
 Temos vários projetos de exemplo que mostram o uso de adaptadores de banco de dados assíncronos:
 
