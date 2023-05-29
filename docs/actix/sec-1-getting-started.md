@@ -1,37 +1,35 @@
 ---
-title: Getting Started
+title: Começando
 slug: /actix/getting-started
 ---
 
-# Getting Started
+# Começandod
 
-Let’s create and run our first actix application. We’ll create a new Cargo project
-that depends on actix and then run the application.
+Vamos criar e executar nossa primeira aplicação do Actix. Vamos criar um novo projeto Cargo
+que depende do actix e, em seguida, execute o aplicativo.
 
-In previous section we already installed required rust version. Now let's create new cargo projects.
+Na seção anterior, já instalamos a versão do Rust necessária. Agora vamos criar novos projetos cargo.
 
-## Ping actor
+## Ator de Ping
 
-Let’s write our first actix application! Start by creating a new binary-based
-Cargo project and changing into the new directory:
+Vamos escrever nossa primeira aplicação Actix! Comece criando um novo projeto cargo baseado em binário e navegue para o novo diretório:
 
 ```bash
 cargo new actor-ping
 cd actor-ping
 ```
 
-Now, add actix as a dependency of your project by ensuring your Cargo.toml
-contains the following:
+Agora, adicione o actix como uma dependência do seu projeto, certificando-se de que o seu Cargo.toml contenha o seguinte:
 
 ```toml
 [dependencies]
 actix = "0.11.0"
-actix-rt = "2.2" # <-- Runtime for actix
+actix-rt = "2.2" # <-- Runtime do actix
 ```
 
-Let's create an actor that will accept a `Ping` message and respond with the number of pings processed.
+Vamos criar um ator(actor) que irá receber uma mensagem `Ping` e responder com o número de pings processados.
 
-An actor is a type that implements the `Actor` trait:
+Um ator é um tipo que implementa a trait `Actor`:
 
 ```rust
 use actix::prelude::*;
@@ -45,11 +43,9 @@ impl Actor for MyActor {
 }
 ```
 
-Each actor has an execution context, for `MyActor` we are going to use `Context<A>`. More information
-on actor contexts is available in the next section.
+Cada ator possui um contexto de execução, para `MyActor` vamos usar `Context<A>`. Mais informações sobre os contextos dos atores estão disponíveis na próxima seção.
 
-Now we need to define the `Message` that the actor needs to accept. The message can be any type
-that implements the `Message` trait.
+Agora precisamos definir a `Message` que o ator precisa aceitar. A mensagem pode ser qualquer tipo que implemente a trait `Message`.
 
 ```rust
 use actix::prelude::*;
@@ -59,12 +55,9 @@ use actix::prelude::*;
 struct Ping(usize);
 ```
 
-The main purpose of the `Message` trait is to define a result type. The `Ping` message defines
-`usize`, which indicates that any actor that can accept a `Ping` message needs to
-return `usize` value.
+O objetivo principal da trait `Message` é definir um tipo de resultado. A mensagem `Ping` define `usize`, o que indica que qualquer ator que possa aceitar uma mensagem `Ping` precisa retornar um valor `usize`.
 
-And finally, we need to declare that our actor `MyActor` can accept `Ping` and handle it.
-To do this, the actor needs to implement the `Handler<Ping>` trait.
+E, finalmente, precisamos declarar que nosso ator `MyActor` pode aceitar `Ping` e lidar com isso. Para fazer isso, o ator precisa implementar a trait `Handler<Ping>`.
 
 ```rust
 impl Handler<Ping> for MyActor {
@@ -78,21 +71,14 @@ impl Handler<Ping> for MyActor {
 }
 ```
 
-That's it. Now we just need to start our actor and send a message to it.
-The start procedure depends on the actor's context implementation. In our case we can use
-`Context<A>` which is tokio/future based. We can start it with `Actor::start()`
-or `Actor::create()`. The first is used when the actor instance can be created immediately.
-The second method is used in case we need access to the context object before we can create
-the actor instance. In case of the `MyActor` actor we can use `start()`.
+É isso. Agora só precisamos iniciar nosso ator e enviar uma mensagem para ele. O procedimento de inicialização depende da implementação do contexto do ator. No nosso caso, podemos usar `Context<A>`, que é baseado em tokio/future. Podemos iniciá-lo com `Actor::start()` ou `Actor::create()`. O primeiro é usado quando a instância do ator pode ser criada imediatamente. O segundo método é usado quando precisamos ter acesso ao objeto de contexto antes de criar a instância do ator. No caso do ator `MyActor`, podemos usar `start()`.
 
-All communication with actors goes through an address. You can `do_send` a message
-without waiting for a response, or `send` to an actor with a specific message.
-Both `start()` and `create()` return an address object.
+Toda comunicação com atores é feita por meio de um endereço. Você pode usar `do_send` para enviar uma mensagem sem aguardar uma resposta, 
+ou `send` para enviar uma mensagem específica para um ator. Tanto `start()` quanto `create()` retornam um objeto de endereço.
 
-In the following example we are going to create a `MyActor` actor and send one message.
+No exemplo a seguir, vamos criar um ator `MyActor` e enviar uma mensagem.
 
-Here we use the actix-rt as way to start our System and drive our main Future
-so we can easily `.await` for the messages sent to the Actor.
+Aqui estamos usando o `actix-rt` como forma de iniciar nosso sistema e executar nosso Future principal, para que possamos facilmente utilizar `.await` para aguardar as mensagens enviadas ao ator.
 
 ```rust
 #[actix_rt::main] 
@@ -111,6 +97,6 @@ async fn main() {
 }
 ```
 
-`#[actix_rt::main]` starts the system and block until future resolves.
+`#[actix_rt::main]` inicia o sistema e bloqueia até que o Future seja resolvido.
 
-The Ping example is available in the [examples directory](https://github.com/actix/actix/tree/master/actix/examples/).
+O exemplo do Ping está disponível no diretório [examples](https://github.com/actix/actix/tree/master/actix/examples/) do repositório.
