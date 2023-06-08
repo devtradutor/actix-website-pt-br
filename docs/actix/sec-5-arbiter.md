@@ -5,51 +5,26 @@ slug: /actix/arbiter
 
 # Arbiter
 
-`Arbiter`s provide an asynchronous execution context for `Actor`s, `functions` and `futures`. Where an
-actor contains a `Context` that defines its Actor specific execution state,
-Arbiters host the environment where an actor runs.
+Os `Arbiters` fornecem um contexto de execução assíncrona para `Actors`, `funções` e `futures`. Onde um ator contém um `Context` que define seu estado de execução específico do ator, os `Arbiters` hospedam o ambiente onde um ator é executado.
 
-As a result Arbiters perform a number of functions. Most notably, they are able
-to spawn a new OS thread, run an event loop, spawn tasks asynchronously on that
-event loop, and act as helpers for asynchronous tasks.
+Como resultado, os `Arbiters` desempenham várias funções. Mais notavelmente, eles são capazes de criar uma nova thread do sistema operacional, executar um loop de eventos, criar tarefas de forma assíncrona nesse loop de eventos e atuar como auxiliares para tarefas assíncronas.
 
-## System and Arbiter
+## Sistema e Arbiter
 
-In all our previous code examples the function `System::new` creates an Arbiter
-for your actors to run inside. When you call `start()` on your actor it is then
-running inside of the System Arbiter's thread. In many cases, this is all you
-will need for a program using Actix.
+Em todos os nossos exemplos de código anteriores, a função `System::new` cria um `Arbiter` para que seus atores possam ser executados dentro dele. Quando você chama `start()` no seu ator, ele está sendo executado dentro da thread do `Arbiter` do `System`. Em muitos casos, isso é tudo o que você precisa para um programa usando o Actix.
 
-While it only uses one thread, it uses the very efficient event loop pattern
-which works well for asynchronous events. To handle synchronous, CPU-bound
-tasks, it's better to avoid blocking the event loop and instead offload the
-computation to other threads. For this usecase, read the next section and
-consider using [`SyncArbiter`](./sync-arbiter).
+Embora ele use apenas uma thread, ele utiliza o padrão de loop de eventos muito eficiente, que funciona bem para eventos assíncronos. Para lidar com tarefas síncronas que consomem muito CPU, é melhor evitar bloquear o loop de eventos e, em vez disso, transferir o processamento para outras threads. Para esse caso de uso, leia a próxima seção e considere usar o [`SyncArbiter`](./sync-arbiter).
 
-## The event loop
+## O loop de eventos
+Um `Arbiter` controla uma thread com um pool de eventos. Quando um `Arbiter` inicia uma tarefa (por meio de `Arbiter::spawn`, `Context<Actor>::run_later` ou construções similares), o `Arbiter` coloca a tarefa na fila de execução dessa fila de tarefas. Quando você pensa em `Arbiter`, pode pensar em um "loop de eventos de thread única".
 
-One `Arbiter` is in control of one thread with one event pool. When an Arbiter
-spawns a task (via `Arbiter::spawn`, `Context<Actor>::run_later`, or similar
-constructs), the Arbiter queues the task for execution on that task queue. When
-you think `Arbiter`, you can think "single-threaded event loop".
+O Actix em geral suporta a concorrência, mas os `Arbiters` normais (não os `SyncArbiters`) não suportam. Para usar o Actix de forma concorrente, você pode iniciar vários `Arbiters` usando `Arbiter::new`, `ArbiterBuilder` ou `Arbiter::start`.
 
-Actix in general does support concurrency, but normal `Arbiter`s (not
-`SyncArbiter`s) do not. To use Actix in a concurrent way, you can spin up
-multiple `Arbiter`s using `Arbiter::new`, `ArbiterBuilder`, or `Arbiter::start`.
+Quando você cria um novo `Arbiter`, isso cria um novo contexto de execução para os `Actors`. A nova thread está disponível para adicionar novos `Actors` a ela, mas os `Actors` não podem se mover livremente entre os `Arbiters`: eles estão vinculados ao `Arbiter` em que foram iniciados. No entanto, `Actors` em diferentes `Arbiters` ainda podem se comunicar entre si usando os métodos normais de `Addr`/`Recipient`. O método de passagem de mensagens é agnóstico em relação a se os `Actors` estão sendo executados nos mesmos `Arbiters` ou em `Arbiters` diferentes.
 
-When you create a new Arbiter, this creates a new execution context for Actors.
-The new thread is available to add new Actors to it, but Actors cannot freely
-move between Arbiters: they are tied to the Arbiter they were spawned in.
-However, Actors on different Arbiters can still communicate with each other
-using the normal `Addr`/`Recipient` methods. The method of passing messages is
-agnostic to whether the Actors are running on the same or different Arbiters.
+## Usando o Arbiter para resolver eventos assíncronos
 
-## Using Arbiter for resolving async events
-
-If you aren't an expert in Rust Futures, Arbiter can be a helpful and simple
-wrapper to resolving async events in order. Consider we have two actors, A and
-B, and we want to run an event on B only once a result from A is completed. We
-can use `Arbiter::spawn` to assist with this task.
+Se você não é um especialista em Rust Futures, o `Arbiter` pode ser uma ajuda e uma forma simples de lidar com a resolução de eventos assíncronos em ordem. Vamos considerar que temos dois atores, A e B, e queremos executar um evento em B somente após a conclusão de um resultado em A. Podemos usar `Arbiter::spawn` para ajudar nessa tarefa.
 
 ```rust
 use actix::prelude::*;
