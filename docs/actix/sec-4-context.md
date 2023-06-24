@@ -1,20 +1,14 @@
 ---
-title: Context
+title: Contexto
 slug: /actix/context
 ---
 
-# Context
+# Contexto
 
-Actors all maintain an internal execution context, or state. This
-allows an actor to determine its own Address, change mailbox limits,
-or stop its execution.
+Os atores mantêm um contexto de execução interno, ou estado. Isso permite que um ator determine seu próprio endereço, altere os limites da caixa de mensagens ou interrompa sua execução.
 
-## Mailbox
-
-All messages go to the actor's mailbox first, then the actor's execution context
-calls specific message handlers. Mailboxes in general are bounded. The capacity is
-specific to the context implementation. For the `Context` type the capacity is set to
-16 messages by default and can be increased with [`Context::set_mailbox_capacity()`].
+## Caixa de mensagens(Mailbox)
+Todas as mensagens vão primeiro para a caixa de mensagens do ator e, em seguida, o contexto de execução do ator chama os manipuladores de mensagem específicos. As caixas de mensagens em geral têm um limite de capacidade. A capacidade é específica para a implementação do contexto. Para o tipo `Context`, a capacidade é definida como 16 mensagens por padrão e pode ser aumentada com [`Context::set_mailbox_capacity()`].
 
 ```rust
 struct MyActor;
@@ -30,21 +24,15 @@ impl Actor for MyActor {
 let addr = MyActor.start();
 ```
 
-Remember that this doesn't apply to `Addr::do_send(M)` which bypasses the Mailbox queue limit, or
-`AsyncContext::notify(M)` and `AsyncContext::notify_later(M, Duration)` which bypasses the mailbox
-entirely.
+Lembre-se de que isso não se aplica ao `Addr::do_send(M)`, que ignora o limite da fila da caixa de mensagens, ou ao `AsyncContext::notify(M)` e `AsyncContext::notify_later(M, Duration)`, que ignoram completamente a caixa de mensagens.
 
 [`Context::set_mailbox_capacity()`]: https://docs.rs/actix/latest/actix/struct.Context.html#method.set_mailbox_capacity
 
-## Getting your actors Address
+## Obtendo o endereço dos atores
 
-An actor can view its own address from its context. Perhaps you want to requeue an event for
-later, or you want to transform the message type. Maybe you want to respond with your address
-to a message. If you want an actor to send a message to itself, have a look at
-`AsyncContext::notify(M)` instead.
+Um ator pode obter seu próprio endereço a partir de seu contexto. Talvez você queira reenfileirar um evento para mais tarde, ou queira transformar o tipo da mensagem. Talvez você queira responder com seu próprio endereço a uma mensagem. Se você quiser que um ator envie uma mensagem para si mesmo, dê uma olhada em `AsyncContext::notify(M)` em vez disso.
 
-To get your address from the context you call [`Context::address()`]. An example is:
-
+Para obter seu endereço do contexto, você chama o [`Context::address()`]. Um exemplo é:
 ```rust
 struct MyActor;
 
@@ -71,13 +59,12 @@ let who_addr = addr.do_send(WhoAmI{});
 
 [`Context::address()`]: https://docs.rs/actix/latest/actix/struct.Context.html#method.address
 
-## Stopping an Actor
+## Parando um ator
 
-From within the actors execution context you can choose to stop the actor from processing
-any future Mailbox messages. This could be in response to an error condition, or as part
-of program shutdown. To do this you call [`Context::stop()`].
 
-This is an adjusted Ping example that stops after 4 pings are received.
+Dentro do contexto de execução do ator, você pode escolher parar o processamento de futuras mensagens da caixa de correio do ator. Isso pode ser feito em resposta a uma condição de erro ou como parte do encerramento do programa. Para fazer isso, você chama [Context::stop()].
+
+Este é um exemplo ajustado do Ping que para após receber 4 pings.
 
 ```rust
 impl Handler<Ping> for MyActor {

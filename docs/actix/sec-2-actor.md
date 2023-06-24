@@ -1,82 +1,58 @@
 ---
-title: Actor
+title: Ator
 slug: /actix/actor
 ---
 
-# Actor
+# Ator (Actor)
 
-Actix is a rust library providing a framework for developing concurrent applications.
+O Actix é uma biblioteca em Rust que fornece um framework para o desenvolvimento de aplicativos concorrentes.
 
-Actix is built on the [Actor Model] which
-allows applications to be written as a group of independently executing but cooperating
-"Actors" which communicate via messages. Actors are objects which encapsulate
-state and behavior and run within the *Actor System* provided by the actix library.
+O Actix é construído no [Modelo de Ator(Actor Model)][Actor Model], que permite que os aplicativos sejam escritos como um grupo de "Atores" independentes, mas que cooperam entre si, se comunicando por meio de mensagens. Atores são objetos que encapsulam estado e comportamento e são executados dentro do *Sistema de Ator* fornecido pela biblioteca Actix.
 
-Actors run within a specific execution context [`Context<A>`].
-The context object is available only during execution. Each actor has a separate
-execution context. The execution context also controls the lifecycle of an actor.
+Os atores são executados dentro de um contexto de execução específico [`Context<A>`]. O objeto de contexto está disponível apenas durante a execução. Cada ator tem um contexto de execução separado. O contexto de execução também controla o ciclo de vida de um ator.
 
-Actors communicate exclusively by exchanging messages. The sending actor can
-optionally wait for the response. Actors are not referenced directly, but by means
-of addresses.
+Os atores se comunicam exclusivamente trocando mensagens. O ator remetente pode opcionalmente aguardar a resposta. Os atores não são referenciados diretamente, mas por meio de endereços.
 
-Any rust type can be an actor, it only needs to implement the [`Actor`] trait.
+Qualquer tipo Rust pode ser um ator, desde que implemente o traço [`Actor`].
 
-To be able to handle a specific message the actor has to provide a
-[`Handler<M>`] implementation for this message. All messages
-are statically typed. The message can be handled in an asynchronous fashion.
-Actor can spawn other actors or add futures or streams to execution context.
-The `Actor` trait provides several methods that allow controlling the actor's lifecycle.
+Para ser capaz de lidar com uma mensagem específica, o ator deve fornecer uma implementação [`Handler<M>`] para essa mensagem. Todas as mensagens são tipadas estaticamente. A mensagem pode ser tratada de forma assíncrona. O ator pode criar outros atores ou adicionar futuros ou streams ao contexto de execução. A trait `Actor` fornece vários métodos que permitem controlar o ciclo de vida do ator.
 
 [Actor Model]: https://en.wikipedia.org/wiki/Actor_model
 [`Context<A>`]: ./context
 [`Actor`]: https://docs.rs/actix/latest/actix/trait.Actor.html
 [`Handler<M>`]: https://docs.rs/actix/latest/actix/trait.Handler.html
 
-## Actor lifecycle
+## Ciclo de vida do ator
 
-### Started
+### Iniciado
 
-An actor always starts in the `Started` state. During this state the actor's `started()`
-method is called. The `Actor` trait provides a default implementation for this method.
-The actor context is available during this state and the actor can start more actors or register
-async streams or do any other required configuration.
+Um ator sempre começa no estado `Started`. Durante este estado, o método `started()` do ator é chamado. A trait `Actor` fornece uma implementação padrão para este método. O contexto do ator está disponível durante este estado e o ator pode iniciar outros atores, registrar fluxos assíncronos ou realizar qualquer outra configuração necessária.
 
-### Running
+### Executando
 
-After an Actor's `started()` method is called, the actor transitions to the `Running` state.
-The Actor can stay in `running` state indefinitely.
+Após a chamada do método `started()` do ator, o ator transita para o estado `Running(Executando)`. O ator pode permanecer no estado `running` indefinidamente.
 
-### Stopping
+### Parando
 
-The Actor's execution state changes to the `stopping` state in the following situations:
+O estado de execução do ator muda para o estado `stopping` nas seguintes situações:
 
-* `Context::stop` is called by the actor itself
-* all addresses to the actor get dropped. i.e. no other actor references it.
-* no event objects are registered in the context.
+* `Context::stop` é chamado pelo próprio ator
+* todos os endereços para o ator são descartados, ou seja, nenhum outro ator faz referência a isso.
+* nenhum objeto de evento está registrado no contexto.
 
-An actor can restore from the `stopping` state to the `running` state by creating a new
-address or adding an event object, and by returning `Running::Continue`.
+Um ator pode restaurar do estado `stopping` para o estado `running` criando um novo endereço ou adicionando um objeto de evento, e retornando `Running::Continue`.
 
-If an actor changed state to `stopping` because `Context::stop()` is called
-then the context immediately stops processing incoming messages and calls
-`Actor::stopping()`. If the actor does not restore back to the `running` state, all
-unprocessed messages are dropped.
+Se um ator mudou de estado para `stopping` porque `Context::stop()` foi chamado, então o contexto imediatamente para de processar as mensagens recebidas e chama `Actor::stopping()`. Se o ator não retornar ao estado `running`, todas as mensagens não processadas são descartadas.
 
-By default this method returns `Running::Stop` which confirms the stop operation.
+Por padrão, este método retorna `Running::Stop`, o que confirma a operação de parada.
 
-### Stopped
+### Parado
 
-If the actor does not modify the execution context during the stopping state, the actor state changes
-to `Stopped`. This state is considered final and at this point the actor is dropped.
+Se o ator não modificar o contexto de execução durante o estado de parada, o estado do ator muda para `Stopped`. Este estado é considerado final e, neste ponto, o ator é descartado.
 
-## Message
+## Mensagem
 
-An Actor communicates with other actors by sending messages. In actix all
-messages are typed. A message can be any rust type which implements the
-[`Message`] trait. `Message::Result` defines the return type.
-Let's define a simple `Ping` message - an actor which will accept this message needs to return
-`Result<bool, std::io::Error>`.
+Um ator se comunica com outros atores enviando mensagens. Em actix, todas as mensagens são tipadas. Uma mensagem pode ser qualquer tipo Rust que implemente a trait [`Message`]. `Message::Result` define o tipo de retorno. Vamos definir uma mensagem simples `Ping` - um ator que aceitará essa mensagem precisa retornar `Result<bool, std::io::Error>`.
 
 ```rust
 use actix::prelude::*;
@@ -90,14 +66,11 @@ impl Message for Ping {
 
 [`Message`]: https://docs.rs/actix/latest/actix/trait.Message.html
 
-## Spawning an actor
+## Gerando um ator
 
-How to start an actor depends on its context. Spawning a new async actor
-is achieved via the `start` and `create` methods of
-the [`Actor`] trait. It provides several different ways of
-creating actors; for details check the docs.
+Como iniciar um ator depende do seu contexto. A criação de um novo ator assíncrono é feita por meio dos métodos `start` e `create` da trait [`Actor`]. Ele fornece várias maneiras diferentes de criar atores; para obter mais detalhes, consulte a documentação.
 
-## Complete example
+## Exemplo completo
 
 ```rust
 use actix::prelude::*;
@@ -150,12 +123,10 @@ async fn main() {
 }
 ```
 
-## Responding with a MessageResponse
+## Respondendo com um MessageResponse
 
-Let's take a look at the `Result` type defined for the `impl Handler` in the above example.
-See how we're returning a `Result<bool, std::io::Error>`? We're able to respond to our actor's
-incoming message with this type because it has the `MessageResponse` trait implemented for that type.
-Here's the definition for that trait:
+Vamos dar uma olhada no tipo `Result` definido para a implementação de `impl Handler` no exemplo acima.
+Veja como estamos retornando um `Result<bool, std::io::Error>`? Podemos responder à mensagem recebida pelo nosso ator com esse tipo porque ele implementa a trait `MessageResponse` para esse tipo. Aqui está a definição desta trait:
 
 ```rust
 pub trait MessageResponse<A: Actor, M: Message> {
@@ -163,10 +134,7 @@ pub trait MessageResponse<A: Actor, M: Message> {
 }
 ```
 
-Sometimes it makes sense to respond to incoming messages with types that don't have this trait
-implemented for them. When that happens we can implement the trait ourselves.
-Here's an example where we're responding to a `Ping` message with a `GotPing`,
-and responding with `GotPong` for a `Pong` message.
+Às vezes, faz sentido responder a mensagens recebidas com tipos que não têm essa trait implementada para eles. Quando isso acontece, podemos implementar o trait nós mesmos. Aqui está um exemplo em que estamos respondendo a uma mensagem `Ping` com uma `GotPing` e respondendo com `GotPong` para uma mensagem `Pong`.
 
 ```rust
 use actix::dev::{MessageResponse, OneshotSender};
@@ -196,10 +164,10 @@ where
     }
 }
 
-// Define actor
+// Define um ator
 struct MyActor;
 
-// Provide Actor implementation for our actor
+// Fornecer implementação de ator para nosso ator
 impl Actor for MyActor {
     type Context = Context<Self>;
 
@@ -212,7 +180,7 @@ impl Actor for MyActor {
     }
 }
 
-/// Define handler for `Messages` enum
+/// Defina o manipulador para a enum `Messages`
 impl Handler<Messages> for MyActor {
     type Result = Responses;
 

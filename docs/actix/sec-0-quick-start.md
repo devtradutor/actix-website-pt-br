@@ -1,34 +1,32 @@
 ---
-title: Quick start
+title: Início Rápido
 slug: /actix
 ---
 
-# Quick start
+# Início Rápido
 
-Before you can start writing an actix application, you’ll need a version of Rust installed.
-We recommend you use rustup to install or configure such a version.
+Antes de começar a escrever um aplicativo actix, você precisará ter uma versão do Rust instalada.
+Recomendamos que você use o rustup para instalar ou configurar tal versão.
 
-## Install Rust
+## Instalar Rust
 
-Before we begin, we need to install Rust using the [rustup](https://rustup.rs/) installer:
+Antes de começarmos, precisamos instalar o Rust usando o instalador [rustup](https://rustup.rs/):
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-If you already have rustup installed, run this command to ensure you have the latest version of Rust:
+Se você já tem o rustup instalado, execute este comando para garantir que você tenha a versão mais recente do Rust:
 
 ```bash
 rustup update
 ```
 
-The actix framework requires Rust version 1.40.0 and up.
+O framework actix requer a versão 1.40.0 ou superior do Rust.
 
-## Running Examples
+## Executando Exemplos
 
-The fastest way to start experimenting with actix is to clone the actix repository
-and run the included examples in the examples/ directory. The following set of
-commands runs the `ping` example:
+A maneira mais rápida de começar a experimentar o actix é clonar o repositório do actix e executar os exemplos incluídos no diretório examples/. O seguinte conjunto de comandos executa o exemplo `ping`:
 
 ```bash
 git clone https://github.com/actix/actix
@@ -36,4 +34,4 @@ cd actix
 cargo run --example ping
 ```
 
-Check [examples/](https://github.com/actix/actix/tree/master/actix/examples) directory for more examples.
+Verifique o diretório [examples/](https://github.com/actix/actix/tree/master/actix/examples) para mais exemplos.

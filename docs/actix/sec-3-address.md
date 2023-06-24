@@ -1,19 +1,15 @@
 ---
-title: Address
+title: Endereço
 slug: /actix/address
 ---
 
-# Address
+# Endereço
 
-Actors communicate exclusively by exchanging messages. The sending actor can optionally
-wait for the response. Actors cannot be referenced directly, only by their addresses.
+Os atores se comunicam exclusivamente trocando mensagens. O ator de envio pode opcionalmente esperar pela resposta. Os atores não podem ser referenciados diretamente, apenas por meio de seus endereços.
 
-There are several ways to get the address of an actor. The `Actor` trait provides
-two helper methods for starting an actor. Both return the address of the started actor.
+Existem várias maneiras de obter o endereço de um ator. A trait `Actor` fornece dois métodos auxiliares para iniciar um ator. Ambos retornam o endereço do ator iniciado.
 
-Here is an example of `Actor::start()` method usage. In this example `MyActor` actor
-is asynchronous and is started in the same thread as the caller - threads are covered in
-the [SyncArbiter] chapter.
+Aqui está um exemplo de uso do método `Actor::start()`. Neste exemplo, o ator `MyActor` é assíncrono e é iniciado na mesma thread do chamador - tópicos são abordados no capítulo [SyncArbiter].
 
 ```rust
 struct MyActor;
@@ -23,9 +19,7 @@ impl Actor for MyActor {
 
 let addr = MyActor.start();
 ```
-
-An async actor can get its address from the `Context` struct. The context needs to
-implement the `AsyncContext` trait. `AsyncContext::address()` provides the actor's address.
+Um ator assíncrono pode obter seu endereço a partir da struct `Context`. O contexto precisa implementar a trait `AsyncContext`. `AsyncContext::address()` fornece o endereço do ator.
 
 ```rust
 struct MyActor;
@@ -41,46 +35,28 @@ impl Actor for MyActor {
 
 [SyncArbiter]: ./sync-arbiter
 
-## Message
+## Mensagem
 
-To be able to handle a specific message the actor has to provide a
-[`Handler<M>`] implementation for this message.
-All messages are statically typed. The message can be handled in an asynchronous
-fashion. The actor can spawn other actors or add futures or
-streams to the execution context. The actor trait provides several methods that allow
-controlling the actor's lifecycle.
+Para poder lidar com uma mensagem específica, o ator precisa fornecer uma implementação de [`Handler<M>`] para essa mensagem. Todas as mensagens têm um tipo estático. A mensagem pode ser tratada de forma assíncrona. O ator pode criar outros atores, adicionar futuros ou fluxos ao contexto de execução. A trait do ator fornece vários métodos que permitem controlar o ciclo de vida do ator.
 
-To send a message to an actor, the `Addr` object needs to be used. `Addr` provides several
-ways to send a message.
+Para enviar uma mensagem a um ator, é necessário usar o objeto `Addr`. O `Addr` fornece várias maneiras de enviar uma mensagem.
 
-  * `Addr::do_send(M)` - this method ignores any errors in message sending. If the mailbox
-  is full the message is still queued, bypassing the limit. If the actor's mailbox is closed,
-  the message is silently dropped. This method does not return the result, so if the
-  mailbox is closed and a failure occurs, you won't have an indication of this.
+* `Addr::do_send(M)` - Este método ignora quaisquer erros no envio da mensagem. Se a caixa de correio estiver cheia, a mensagem ainda será enfileirada, ignorando o limite. 
+Se a caixa de correio do ator estiver fechada, a mensagem será descartada silenciosamente. 
+Este método não retorna o resultado, portanto, se a caixa de correio estiver fechada e ocorrer uma falha, você não terá uma indicação disso.
 
-  * `Addr::try_send(M)` - this method tries to send the message immediately. If
-  the mailbox is full or closed (actor is dead), this method returns a
-  [`SendError`].
-
-  * `Addr::send(M)` - This message returns a future object that resolves to a result
-  of a message handling process. If the returned `Future` object is dropped, the
-  message is cancelled.
+* `Addr::try_send(M)` - Este método tenta enviar a mensagem imediatamente. Se a caixa de correio estiver cheia ou fechada (ator está morto), este método retorna um [`SendError`].
+* `Addr::send(M)` - Este método retorna um objeto futuro que se resolve para um resultado do processo de tratamento da mensagem. Se o objeto `Future` retornado for descartado, a mensagem será cancelada.
 
 [`Handler<M>`]: https://docs.rs/actix/latest/actix/trait.Handler.html
 [`SendError`]: https://docs.rs/actix/latest/actix/prelude/enum.SendError.html
 
-## Recipient
+## Destinatário(Recipient)
+O `Recipient` é uma versão especializada de um endereço que suporta apenas um tipo de mensagem. Ele pode ser usado quando a mensagem precisa ser enviada para um tipo diferente de ator. Um objeto `Recipient` pode ser criado a partir de um endereço com o método `Addr::recipient()`.
 
-Recipient is a specialized version of an address that supports only one type of message.
-It can be used in case the message needs to be sent to a different type of actor.
-A recipient object can be created from an address with `Addr::recipient()`.
+Objetos de endereço requerem um tipo de ator, mas se quisermos enviar uma mensagem específica para um ator que possa lidar com essa mensagem, podemos usar a interface `Recipient`.
 
-Address objects require an actor type, but if we just want to send a specific message 
-to an actor that can handle the message, we can use the Recipient interface.
-
-For example recipient can be used for a subscription system. In the following example
-`OrderEvents` actor sends a `OrderShipped` message to all subscribers. A subscriber can
-be any actor that implements the `Handler<OrderShipped>` trait.
+Por exemplo, o destinatário pode ser usado em um sistema de assinaturas. No exemplo a seguir, o ator `OrderEvents` envia uma mensagem `OrderShipped` para todos os assinantes. Um assinante pode ser qualquer ator que implemente a trait `Handler<OrderShipped>`.
 
 ```rust
 use actix::prelude::*;
